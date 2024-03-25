@@ -43,4 +43,25 @@ public class ProductController {
         productService.deleteProduct(id);
     }
 
+    @GetMapping("/owner/{ownerId}")
+    public List<Product> getAllProductsByOwnerId(@PathVariable Long ownerId) {
+        return productService.findAllProductsByOwnerId(ownerId);
+    }
+
+
+    @PostMapping("/owner/{ownerId}/add/{productId}")
+    public Product addProductToOwner(@PathVariable Long ownerId, @PathVariable Long productId) {
+        return productService.addProductToOwner(ownerId, productId);
+    }
+
+    @DeleteMapping("/owner/{ownerId}/remove/{productId}")
+    public void removeProductFromOwner(@PathVariable Long ownerId, @PathVariable Long productId) {
+        productService.removeProductFromOwner(ownerId, productId);
+    }
+
+    @PutMapping("/owner/{ownerId}/update/{productId}")
+    public Product updateProductForOwner(@PathVariable Long ownerId, @PathVariable Long productId, @RequestBody Product newProduct) {
+        return productService.updateProductForOwner(ownerId, productId, newProduct);
+    }
+
 }

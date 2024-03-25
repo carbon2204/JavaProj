@@ -1,4 +1,5 @@
 package com.example.demo.model;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,11 +12,12 @@ public class Product {
     private String name;
     private double price;
 
+    @JsonIgnoreProperties({"products", "cars"})
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private Owner owner;
 
-    //@JsonIgnore
+    @JsonIgnoreProperties({"owners", "products"})
     @ManyToOne
     @JoinColumn(name = "car_id")
     private Car car;
