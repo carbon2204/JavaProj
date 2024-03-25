@@ -96,7 +96,7 @@ public class ProductService {
                 .filter(product -> product.getId().equals(productId))
                 .findFirst()
                 .orElse(null);
-        if (owner != null && productToUpdate != null) {
+        if (productToUpdate != null) {
             productToUpdate.setName(newProduct.getName());
             productToUpdate.setPrice(newProduct.getPrice());
             productDao.saveProduct(productToUpdate);
