@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class OwnerService {
@@ -52,7 +51,7 @@ public class OwnerService {
         if (owner != null) {
             return owner.getProducts();
         }
-        return null;
+        return new LinkedList<Product>();
     }
 
     public Product saveProductForOwner(Long ownerId, Product product) {
