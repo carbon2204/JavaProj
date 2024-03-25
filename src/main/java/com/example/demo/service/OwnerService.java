@@ -8,6 +8,7 @@ import com.example.demo.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -89,8 +90,7 @@ public class OwnerService {
         Owner owner = ownerDao.getOwnerById(ownerId);
         if (owner != null) {
             List<Car> cars = carIds.stream()
-                    .map(carId -> carDao.getCarById(carId))
-                    .collect(Collectors.toList());
+                    .map(carId -> carDao.getCarById(carId)).toList();
             owner.setCars(cars);
             ownerDao.saveOwner(owner);
         }
@@ -101,6 +101,6 @@ public class OwnerService {
         if (owner != null) {
             return owner.getCars();
         }
-        return null;
+        return new LinkedList<Car>();
     }
 }

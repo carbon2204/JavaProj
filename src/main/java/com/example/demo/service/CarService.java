@@ -10,10 +10,12 @@ import com.example.demo.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+
+
 
 @Service
 public class CarService {
@@ -130,8 +132,7 @@ public class CarService {
         Car car = carDao.getCarById(carId);
         if (car != null) {
             List<Owner> owners = ownerIds.stream()
-                    .map(ownerId -> ownerDao.getOwnerById(ownerId))
-                    .collect(Collectors.toList());
+                    .map(ownerId -> ownerDao.getOwnerById(ownerId)).toList();
             car.setOwners(owners);
             carDao.saveCar(car);
         }
@@ -142,7 +143,7 @@ public class CarService {
         if (car != null) {
             return car.getOwners();
         }
-        return null;
+        return new LinkedList<Owner>();
     }
 
     public void addProductToCar(Long carId, Long productId) {
@@ -167,8 +168,7 @@ public class CarService {
         Car car = carDao.getCarById(carId);
         if (car != null) {
             List<Product> products = productIds.stream()
-                    .map(productId -> productDao.getProductById(productId))
-                    .collect(Collectors.toList());
+                    .map(productId -> productDao.getProductById(productId)).toList();
             car.setProducts(products);
             carDao.saveCar(car);
         }
@@ -179,7 +179,7 @@ public class CarService {
         if (car != null) {
             return car.getProducts();
         }
-        return null;
+        return new LinkedList<Product>();
     }
 }
 
