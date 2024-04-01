@@ -104,11 +104,6 @@ public class CarService {
         return carRepository.save(car);
     }
 
-
-
-
-
-
     public void addOwnerToCar(Long carId, Long ownerId) {
         Car car = carDao.getCarById(carId);
         Owner owner = ownerDao.getOwnerById(ownerId);

@@ -63,9 +63,6 @@ public class OwnerService {
         return null;
     }
 
-
-
-
     public void addCarToOwner(Long ownerId, Long carId) {
         Owner owner = ownerDao.getOwnerById(ownerId);
         Car car = carDao.getCarById(carId);
