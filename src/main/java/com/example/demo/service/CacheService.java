@@ -24,6 +24,8 @@ public class CacheService {
         return cache.get(key);
     }
 
+    public void remove(String key){cache.remove(key);}
+
     public boolean containsKey(String key) {
         return cache.containsKey(key);
     }

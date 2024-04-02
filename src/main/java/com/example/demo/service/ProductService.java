@@ -75,6 +75,9 @@ public class ProductService {
     }
 
     public void removeProductFromOwner(Long ownerId, Long productId) {
+        if(cacheService.containsKey("productsByOwner:" + ownerId)){
+            cacheService.remove("productsByOwner:" + ownerId);
+        }
         Owner owner = ownerDao.getOwnerById(ownerId);
         if (owner != null) {
             Product productToRemove = owner.getProducts()
@@ -90,6 +93,9 @@ public class ProductService {
     }
 
     public Product updateProductForOwner(Long ownerId, Long productId, Product newProduct) {
+        if(cacheService.containsKey("productsByOwner:" + ownerId)){
+            cacheService.remove("productsByOwner:" + ownerId);
+        }
         Owner owner = ownerDao.getOwnerById(ownerId);
         Product productToUpdate = owner.getProducts()
                 .stream()
