@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ProductService {
+  private static final String PRODUCTS_BY_OWNER_CACHE_KEY_PREFIX = "productsByOwner:";
+
   private final CacheService cacheService;
   private final ProductDao productDao;
   private final ProductRepository productRepository;
@@ -76,7 +78,7 @@ public class ProductService {
      * @return the list
      */
   public List<Product> findAllProductsByOwnerId(Long ownerId) {
-    String cacheKey = "productsByOwner:" + ownerId;
+    String cacheKey = PRODUCTS_BY_OWNER_CACHE_KEY_PREFIX + ownerId;
     if (cacheService.containsKey(cacheKey)) {
       return (List<Product>) cacheService.get(cacheKey);
     } else {
@@ -111,8 +113,8 @@ public class ProductService {
      * @param productId the product id
      */
   public void removeProductFromOwner(Long ownerId, Long productId) {
-    if (cacheService.containsKey("productsByOwner:" + ownerId)) {
-      cacheService.remove("productsByOwner:" + ownerId);
+    if (cacheService.containsKey(PRODUCTS_BY_OWNER_CACHE_KEY_PREFIX + ownerId)) {
+      cacheService.remove(PRODUCTS_BY_OWNER_CACHE_KEY_PREFIX + ownerId);
     }
     Owner owner = ownerDao.getOwnerById(ownerId);
     if (owner != null) {
@@ -137,8 +139,8 @@ public class ProductService {
      * @return the product
      */
   public Product updateProductForOwner(Long ownerId, Long productId, Product newProduct) {
-    if (cacheService.containsKey("productsByOwner:" + ownerId)) {
-      cacheService.remove("productsByOwner:" + ownerId);
+    if (cacheService.containsKey(PRODUCTS_BY_OWNER_CACHE_KEY_PREFIX + ownerId)) {
+      cacheService.remove(PRODUCTS_BY_OWNER_CACHE_KEY_PREFIX + ownerId);
     }
     Owner owner = ownerDao.getOwnerById(ownerId);
     Product productToUpdate = owner.getProducts()
