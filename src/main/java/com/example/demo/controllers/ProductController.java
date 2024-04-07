@@ -2,66 +2,77 @@ package com.example.demo.controllers;
 
 import com.example.demo.model.Product;
 import com.example.demo.service.ProductService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+/**
+ * The type Product controller.
+ */
 @RestController
 @RequestMapping("/products")
 public class ProductController {
 
-    private final ProductService productService;
+  private final ProductService productService;
 
-    @Autowired
+  @Autowired
     public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
+    this.productService = productService;
+  }
 
-    @GetMapping
+  @GetMapping
     public List<Product> getAllProducts() {
-        return productService.getAllProducts();
-    }
+    return productService.getAllProducts();
+  }
 
-    @GetMapping("/{id}")
+  @GetMapping("/{id}")
     public Product getProductById(@PathVariable Long id) {
-        return productService.getProductById(id);
-    }
+    return productService.getProductById(id);
+  }
 
-    @PostMapping
-    public Product saveProduct(@RequestBody Product product) {
-        return productService.saveProduct(product);
-    }
+  @ResponseStatus(HttpStatus.CREATED)
+  @PostMapping("/create")
+    public Product createProduct(@RequestBody Product product) {
+    return productService.saveProduct(product);
+  }
 
-    @PutMapping("/{id}")
+  @ResponseStatus(HttpStatus.OK)
+  @PutMapping("/{id}")
     public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
-        return productService.updateProduct(id, product);
-    }
+    return productService.updateProduct(id, product);
+  }
 
-    @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
-    }
+  @ResponseStatus(HttpStatus.OK)
+  @DeleteMapping("/{id}")
+    public Long deleteProduct(@PathVariable Long id) {
+    productService.deleteProduct(id);
+    return id;
+  }
 
-    @GetMapping("/owner/{ownerId}")
+  @GetMapping("/owner/{ownerId}")
     public List<Product> getAllProductsByOwnerId(@PathVariable Long ownerId) {
-        return productService.findAllProductsByOwnerId(ownerId);
-    }
+    return productService.findAllProductsByOwnerId(ownerId);
+  }
 
-
-    @PostMapping("/owner/{ownerId}/add/{productId}")
+  @ResponseStatus(HttpStatus.OK)
+  @PostMapping("/owner/{ownerId}/add/{productId}")
     public Product addProductToOwner(@PathVariable Long ownerId, @PathVariable Long productId) {
-        return productService.addProductToOwner(ownerId, productId);
-    }
+    return productService.addProductToOwner(ownerId, productId);
+  }
 
-    @DeleteMapping("/owner/{ownerId}/remove/{productId}")
+  @ResponseStatus(HttpStatus.OK)
+  @DeleteMapping("/owner/{ownerId}/remove/{productId}")
     public void removeProductFromOwner(@PathVariable Long ownerId, @PathVariable Long productId) {
-        productService.removeProductFromOwner(ownerId, productId);
-    }
+    productService.removeProductFromOwner(ownerId, productId);
+  }
 
-    @PutMapping("/owner/{ownerId}/update/{productId}")
-    public Product updateProductForOwner(@PathVariable Long ownerId, @PathVariable Long productId, @RequestBody Product newProduct) {
-        return productService.updateProductForOwner(ownerId, productId, newProduct);
-    }
+  @ResponseStatus(HttpStatus.OK)
+  @PutMapping("/owner/{ownerId}/update/{productId}")
+    public Product updateProductForOwner(@PathVariable Long ownerId,
+                                         @PathVariable Long productId,
+                                         @RequestBody Product newProduct) {
+    return productService.updateProductForOwner(ownerId, productId, newProduct);
+  }
 
 }

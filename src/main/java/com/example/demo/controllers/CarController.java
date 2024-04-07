@@ -3,96 +3,109 @@ package com.example.demo.controllers;
 import com.example.demo.model.Car;
 import com.example.demo.model.Owner;
 import com.example.demo.model.Product;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import com.example.demo.service.CarService;
-
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
+
+/**
+ * The type Car controller.
+ */
 @RestController
 @RequestMapping("/cars")
 public class CarController {
 
-    private final CarService carService;
+  private final CarService carService;
 
-    @Autowired
+  @Autowired
     public CarController(CarService carService) {
-        this.carService = carService;
-    }
+    this.carService = carService;
+  }
 
-    @GetMapping
+  @GetMapping
     public List<Car> getAllCars() {
-        return carService.getAllCars();
-    }
+    return carService.getAllCars();
+  }
 
-    @GetMapping("/{id}")
+  @GetMapping("/{id}")
     public Car getCarById(@PathVariable Long id) {
-        return carService.getCarById(id);
-    }
+    return carService.getCarById(id);
+  }
 
-    @PostMapping
+  @ResponseStatus(HttpStatus.OK)
+  @PostMapping
     public Car saveCar(@RequestBody Car car) {
-        return carService.saveCar(car);
-    }
+    return carService.saveCar(car);
+  }
 
-    @PutMapping("/{id}")
+  @ResponseStatus(HttpStatus.OK)
+  @PutMapping("/update/{id}")
     public Car updateCar(@PathVariable Long id, @RequestBody Car car) {
-        return carService.updateCar(id, car);
-    }
+    return carService.updateCar(id, car);
+  }
 
-    @DeleteMapping("/{id}")
-    public void deleteCar(@PathVariable Long id) {
-        carService.deleteCar(id);
-    }
-
-
-
-    @PostMapping("/analyze")
-    public Car analyzeText(@RequestParam String text) {
-        return carService.analyzeText(text);
-    }
+  @ResponseStatus(HttpStatus.OK)
+  @DeleteMapping("/{id}")
+    public Long deleteCar(@PathVariable Long id) {
+    carService.deleteCar(id);
+    return id;
+  }
 
 
+  @ResponseStatus(HttpStatus.CREATED)
+  @PostMapping("/create")
+    public Car createText(@RequestParam String text) {
+    return carService.analyzeText(text);
+  }
 
-    @PostMapping("/{carId}/owners/{ownerId}")
+
+  @ResponseStatus(HttpStatus.OK)
+  @PostMapping("/{carId}/owners/{ownerId}")
     public void addOwnerToCar(@PathVariable Long carId, @PathVariable Long ownerId) {
-        carService.addOwnerToCar(carId, ownerId);
-    }
+    carService.addOwnerToCar(carId, ownerId);
+  }
 
-    @DeleteMapping("/{carId}/owners/{ownerId}")
+  @ResponseStatus(HttpStatus.OK)
+  @DeleteMapping("/{carId}/owners/{ownerId}")
     public void removeOwnerFromCar(@PathVariable Long carId, @PathVariable Long ownerId) {
-        carService.removeOwnerFromCar(carId, ownerId);
-    }
+    carService.removeOwnerFromCar(carId, ownerId);
+  }
 
-    @PutMapping("/{carId}/owners")
+  @ResponseStatus(HttpStatus.OK)
+  @PutMapping("/{carId}/owners")
     public void updateCarOwners(@PathVariable Long carId, @RequestBody List<Long> ownerIds) {
-        carService.updateCarOwners(carId, ownerIds);
-    }
+    carService.updateCarOwners(carId, ownerIds);
+  }
 
-    @GetMapping("/{carId}/owners")
+  @GetMapping("/{carId}/owners")
     public List<Owner> getAllOwnersOfCar(@PathVariable Long carId) {
-        return carService.getAllOwnersOfCar(carId);
-    }
+    return carService.getAllOwnersOfCar(carId);
+  }
 
-    @PostMapping("/{carId}/products/{productId}")
+  @ResponseStatus(HttpStatus.OK)
+  @PostMapping("/{carId}/products/{productId}")
     public void addProductToCar(@PathVariable Long carId, @PathVariable Long productId) {
-        carService.addProductToCar(carId, productId);
-    }
+    carService.addProductToCar(carId, productId);
+  }
 
-    @DeleteMapping("/{carId}/products/{productId}")
+  @ResponseStatus(HttpStatus.OK)
+  @DeleteMapping("/{carId}/products/{productId}")
     public void removeProductFromCar(@PathVariable Long carId, @PathVariable Long productId) {
-        carService.removeProductFromCar(carId, productId);
-    }
+    carService.removeProductFromCar(carId, productId);
+  }
 
-    @PutMapping("/{carId}/products")
+  @ResponseStatus(HttpStatus.OK)
+  @PutMapping("/{carId}/products")
     public void updateCarProducts(@PathVariable Long carId, @RequestBody List<Long> productIds) {
-        carService.updateCarProducts(carId, productIds);
-    }
+    carService.updateCarProducts(carId, productIds);
+  }
 
-    @GetMapping("/{carId}/products")
+  @GetMapping("/{carId}/products")
     public List<Product> getAllProductsOfCar(@PathVariable Long carId) {
-        return carService.getAllProductsOfCar(carId);
-    }
+    return carService.getAllProductsOfCar(carId);
+  }
 
 }
 

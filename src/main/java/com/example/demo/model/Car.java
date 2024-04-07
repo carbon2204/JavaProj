@@ -4,80 +4,83 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.List;
 
+/**
+ * The type Car.
+ */
 @Entity
 @Table(name = "cars")
 public class Car {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String vin;
-    private String make;
-    private String model;
-    private int year;
-    @JsonIgnoreProperties({"car"})
-    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+  private String vin;
+  private String make;
+  private String model;
+  private int year;
+  @JsonIgnoreProperties({"car"})
+  @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private List<Product> products;
-    @JsonIgnoreProperties({"cars","products"})
-    @ManyToMany(mappedBy = "cars", cascade = CascadeType.ALL)
+  @JsonIgnoreProperties({"cars", "products"})
+  @ManyToMany(mappedBy = "cars", cascade = CascadeType.ALL)
     private List<Owner> owners;
 
-    // Геттеры и сеттеры
-    public Long getId() {
-        return id;
-    }
+  // Геттеры и сеттеры
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getVin() {
-        return vin;
-    }
+  public String getVin() {
+    return vin;
+  }
 
-    public void setVin(String vin) {
-        this.vin = vin;
-    }
+  public void setVin(String vin) {
+    this.vin = vin;
+  }
 
-    public String getMake() {
-        return make;
-    }
+  public String getMake() {
+    return make;
+  }
 
-    public void setMake(String make) {
-        this.make = make;
-    }
+  public void setMake(String make) {
+    this.make = make;
+  }
 
-    public String getModel() {
-        return model;
-    }
+  public String getModel() {
+    return model;
+  }
 
-    public void setModel(String model) {
-        this.model = model;
-    }
+  public void setModel(String model) {
+    this.model = model;
+  }
 
-    public int getYear() {
-        return year;
-    }
+  public int getYear() {
+    return year;
+  }
 
-    public void setYear(int year) {
-        this.year = year;
-    }
+  public void setYear(int year) {
+    this.year = year;
+  }
 
-    public List<Owner> getOwners() {
-        return owners;
-    }
+  public List<Owner> getOwners() {
+    return owners;
+  }
 
-    public void setOwners(List<Owner> owners) {
-        this.owners = owners;
-    }
+  public void setOwners(List<Owner> owners) {
+    this.owners = owners;
+  }
 
-    public List<Product> getProducts() {
-        return products;
-    }
+  public List<Product> getProducts() {
+    return products;
+  }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
+  public void setProducts(List<Product> products) {
+    this.products = products;
+  }
 }
 
 
