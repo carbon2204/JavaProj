@@ -50,6 +50,7 @@ public class OwnerController {
     return ownerService.saveOwner(owner);
   }
 
+  @Transactional
   @ResponseStatus(HttpStatus.OK)
   @PutMapping("/{id}")
     public Owner updateOwner(@PathVariable Long id, @RequestBody Owner owner) {

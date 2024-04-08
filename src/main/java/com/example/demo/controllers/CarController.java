@@ -4,6 +4,7 @@ import com.example.demo.model.Car;
 import com.example.demo.model.Owner;
 import com.example.demo.model.Product;
 import com.example.demo.service.CarService;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,18 +43,21 @@ public class CarController {
     return carService.getCarById(id);
   }
 
+  @Transactional
   @ResponseStatus(HttpStatus.OK)
   @PostMapping
     public Car saveCar(@RequestBody Car car) {
     return carService.saveCar(car);
   }
 
+  @Transactional
   @ResponseStatus(HttpStatus.OK)
   @PutMapping("/update/{id}")
     public Car updateCar(@PathVariable Long id, @RequestBody Car car) {
     return carService.updateCar(id, car);
   }
 
+  @Transactional
   @ResponseStatus(HttpStatus.OK)
   @DeleteMapping("/{id}")
     public Long deleteCar(@PathVariable Long id) {
@@ -61,26 +65,28 @@ public class CarController {
     return id;
   }
 
-
+  @Transactional
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping("/create")
     public Car createText(@RequestParam String text) {
     return carService.analyzeText(text);
   }
 
-
+  @Transactional
   @ResponseStatus(HttpStatus.OK)
   @PostMapping("/{carId}/owners/{ownerId}")
     public void addOwnerToCar(@PathVariable Long carId, @PathVariable Long ownerId) {
     carService.addOwnerToCar(carId, ownerId);
   }
 
+  @Transactional
   @ResponseStatus(HttpStatus.OK)
   @DeleteMapping("/{carId}/owners/{ownerId}")
     public void removeOwnerFromCar(@PathVariable Long carId, @PathVariable Long ownerId) {
     carService.removeOwnerFromCar(carId, ownerId);
   }
 
+  @Transactional
   @ResponseStatus(HttpStatus.OK)
   @PutMapping("/{carId}/owners")
     public void updateCarOwners(@PathVariable Long carId, @RequestBody List<Long> ownerIds) {
@@ -92,24 +98,28 @@ public class CarController {
     return carService.getAllOwnersOfCar(carId);
   }
 
+  @Transactional
   @ResponseStatus(HttpStatus.OK)
   @PostMapping("/{carId}/products/{productId}")
     public void addProductToCar(@PathVariable Long carId, @PathVariable Long productId) {
     carService.addProductToCar(carId, productId);
   }
 
+  @Transactional
   @ResponseStatus(HttpStatus.OK)
   @DeleteMapping("/{carId}/products/{productId}")
     public void removeProductFromCar(@PathVariable Long carId, @PathVariable Long productId) {
     carService.removeProductFromCar(carId, productId);
   }
 
+  @Transactional
   @ResponseStatus(HttpStatus.OK)
   @PutMapping("/{carId}/products")
     public void updateCarProducts(@PathVariable Long carId, @RequestBody List<Long> productIds) {
     carService.updateCarProducts(carId, productIds);
   }
 
+  @Transactional
   @GetMapping("/{carId}/products")
     public List<Product> getAllProductsOfCar(@PathVariable Long carId) {
     return carService.getAllProductsOfCar(carId);
