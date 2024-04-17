@@ -6,6 +6,7 @@ import com.example.demo.model.Product;
 import com.example.demo.service.OwnerService;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -97,6 +98,21 @@ public class OwnerController {
     public List<Car> getAllCarsOfOwner(@PathVariable Long ownerId) {
     return ownerService.getAllCarsOfOwner(ownerId);
   }
+
+  /**
+   * Add several owners list.
+   *
+   * @param owners the owners
+   * @return the list
+   */
+  @ResponseStatus(HttpStatus.CREATED)
+  @PostMapping("/addSeveralOwners")
+  public List<Owner> addSeveralOwners(@RequestBody List<Owner> owners) {
+    return owners.stream()
+            .map(ownerService::saveOwner)
+            .collect(Collectors.toList());
+  }
 }
+
 
 

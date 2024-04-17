@@ -28,8 +28,8 @@ public class ExceptionsHandler {
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   @ExceptionHandler(RuntimeException.class)
   public ErrorMessage runtimeError(Exception ex) {
-    log.error("Runtime exception", ex);
-    return new ErrorMessage(ex.getMessage());
+    log.error("500 error", ex);
+    return new ErrorMessage("Internal server error");
   }
 
   @ResponseStatus(HttpStatus.NOT_FOUND)
