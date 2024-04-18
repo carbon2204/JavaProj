@@ -113,7 +113,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         long ownerId = 1L;
         long productId = 1L;
         Product product = new Product();
-        when(productService.addProductToOwner(eq(ownerId), eq(productId))).thenReturn(product);
+        when(productService.addProductToOwner(ownerId, productId)).thenReturn(product);
 
         // Act and Assert
         mockMvc.perform(post("/products/owner/{ownerId}/add/{productId}", ownerId, productId))
