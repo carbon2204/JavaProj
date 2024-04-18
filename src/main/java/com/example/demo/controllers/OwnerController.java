@@ -110,7 +110,7 @@ public class OwnerController {
   public List<Owner> addSeveralOwners(@RequestBody List<Owner> owners) {
     return owners.stream()
             .map(ownerService::saveOwner)
-            .collect(Collectors.toList());
+            .toList();
   }
 }
 
