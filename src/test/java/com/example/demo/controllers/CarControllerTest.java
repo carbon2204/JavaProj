@@ -4,8 +4,6 @@ import com.example.demo.model.Car;
 import com.example.demo.model.Owner;
 import com.example.demo.model.Product;
 import com.example.demo.service.CarService;
-import java.util.Arrays;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +13,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.hamcrest.Matchers.is;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -28,26 +29,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @RunWith(SpringRunner.class)
 @WebMvcTest(CarController.class)
- class CarControllerTest {
+class CarControllerTest {
 
   @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   @Autowired
-    private MockMvc mockMvc;
+  private MockMvc mockMvc;
 
-  @MockBean
-  private CarService carService;
+  @MockBean private CarService carService;
 
   @Test
   void testGetAllCars() throws Exception {
     List<Car> cars = Arrays.asList(new Car(), new Car());
     when(carService.getAllCars()).thenReturn(cars);
 
-    mockMvc.perform(get("/cars"))
-           .andExpect(status().isOk())
-           .andExpect(jsonPath("$", hasSize(2)));
+    mockMvc.perform(get("/cars")).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(2)));
   }
 
   @Test
@@ -56,9 +53,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     Car car = new Car();
     when(carService.getCarById(carId)).thenReturn(car);
 
-    mockMvc.perform(get("/cars/{id}", carId))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", is(carId)));
+    mockMvc
+        .perform(get("/cars/{id}", carId))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id", is(carId)));
   }
 
   @Test
@@ -66,12 +64,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     Car car = new Car();
     when(carService.saveCar(any())).thenReturn(car);
 
-    mockMvc.perform(post("/cars")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{ \"make\": \"Toyota\", \"model\": \"Camry\" }"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.make", is("Toyota")))
-            .andExpect(jsonPath("$.model", is("Camry")));
+    mockMvc
+        .perform(
+            post("/cars")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{ \"make\": \"Toyota\", \"model\": \"Camry\" }"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.make", is("Toyota")))
+        .andExpect(jsonPath("$.model", is("Camry")));
   }
 
   @Test
@@ -80,21 +80,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     Car updatedCar = new Car();
     when(carService.updateCar(eq(carId), any())).thenReturn(updatedCar);
 
-    mockMvc.perform(put("/cars/update/{id}", carId)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{ \"make\": \"Honda\", \"model\": \"Accord\" }"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.make", is("Honda")))
-            .andExpect(jsonPath("$.model", is("Accord")));
+    mockMvc
+        .perform(
+            put("/cars/update/{id}", carId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{ \"make\": \"Honda\", \"model\": \"Accord\" }"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.make", is("Honda")))
+        .andExpect(jsonPath("$.model", is("Accord")));
   }
 
   @Test
   void testDeleteCar() throws Exception {
     long carId = 1L;
 
-    mockMvc.perform(delete("/cars/{id}", carId))
-            .andExpect(status().isOk())
-            .andExpect(content().string(String.valueOf(carId)));
+    mockMvc
+        .perform(delete("/cars/{id}", carId))
+        .andExpect(status().isOk())
+        .andExpect(content().string(String.valueOf(carId)));
   }
 
   @Test
@@ -103,9 +106,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     Car car = new Car();
     when(carService.analyzeText(text)).thenReturn(car);
 
-    mockMvc.perform(post("/cars/create")
-                    .param("text", text))
-            .andExpect(status().isCreated());
+    mockMvc.perform(post("/cars/create").param("text", text)).andExpect(status().isCreated());
   }
 
   @Test
@@ -113,8 +114,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     long carId = 1L;
     long ownerId = 1L;
 
-    mockMvc.perform(post("/cars/{carId}/owners/{ownerId}", carId, ownerId))
-            .andExpect(status().isOk());
+    mockMvc
+        .perform(post("/cars/{carId}/owners/{ownerId}", carId, ownerId))
+        .andExpect(status().isOk());
   }
 
   @Test
@@ -122,8 +124,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     long carId = 1L;
     long ownerId = 1L;
 
-    mockMvc.perform(delete("/cars/{carId}/owners/{ownerId}", carId, ownerId))
-            .andExpect(status().isOk());
+    mockMvc
+        .perform(delete("/cars/{carId}/owners/{ownerId}", carId, ownerId))
+        .andExpect(status().isOk());
   }
 
   @Test
@@ -131,10 +134,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     long carId = 1L;
     List<Long> ownerIds = Arrays.asList(1L, 2L, 3L);
 
-    mockMvc.perform(put("/cars/{carId}/owners", carId)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("[1, 2, 3]"))
-            .andExpect(status().isOk());
+    mockMvc
+        .perform(
+            put("/cars/{carId}/owners", carId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("[1, 2, 3]"))
+        .andExpect(status().isOk());
   }
 
   @Test
@@ -143,9 +148,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     List<Owner> owners = Arrays.asList(new Owner(), new Owner());
     when(carService.getAllOwnersOfCar(carId)).thenReturn(owners);
 
-    mockMvc.perform(get("/cars/{carId}/owners", carId))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(2)));
+    mockMvc
+        .perform(get("/cars/{carId}/owners", carId))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(2)));
   }
 
   @Test
@@ -153,8 +159,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     long carId = 1L;
     long productId = 1L;
 
-    mockMvc.perform(post("/cars/{carId}/products/{productId}", carId, productId))
-            .andExpect(status().isOk());
+    mockMvc
+        .perform(post("/cars/{carId}/products/{productId}", carId, productId))
+        .andExpect(status().isOk());
   }
 
   @Test
@@ -162,8 +169,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     long carId = 1L;
     long productId = 1L;
 
-    mockMvc.perform(delete("/cars/{carId}/products/{productId}", carId, productId))
-            .andExpect(status().isOk());
+    mockMvc
+        .perform(delete("/cars/{carId}/products/{productId}", carId, productId))
+        .andExpect(status().isOk());
   }
 
   @Test
@@ -171,10 +179,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     long carId = 1L;
     List<Long> productIds = Arrays.asList(1L, 2L, 3L);
 
-    mockMvc.perform(put("/cars/{carId}/products", carId)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("[1, 2, 3]"))
-            .andExpect(status().isOk());
+    mockMvc
+        .perform(
+            put("/cars/{carId}/products", carId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("[1, 2, 3]"))
+        .andExpect(status().isOk());
   }
 
   @Test
@@ -183,8 +193,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     List<Product> products = Arrays.asList(new Product(), new Product());
     when(carService.getAllProductsOfCar(carId)).thenReturn(products);
 
-    mockMvc.perform(get("/cars/{carId}/products", carId))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(2)));
+    mockMvc
+        .perform(get("/cars/{carId}/products", carId))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(2)));
   }
 }
