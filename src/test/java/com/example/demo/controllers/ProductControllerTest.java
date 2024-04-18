@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ProductController.class)
-public class ProductControllerTest {
+ class ProductControllerTest {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
@@ -30,7 +30,7 @@ public class ProductControllerTest {
     private ProductService productService;
 
     @Test
-    public void testGetAllProducts() throws Exception {
+     void testGetAllProducts() throws Exception {
         // Arrange
         List<Product> products = Arrays.asList(new Product(), new Product());
         when(productService.getAllProducts()).thenReturn(products);
@@ -42,7 +42,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void testGetProductById() throws Exception {
+     void testGetProductById() throws Exception {
         // Arrange
         long productId = 1L;
         Product product = new Product();
@@ -55,7 +55,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void testCreateProduct() throws Exception {
+     void testCreateProduct() throws Exception {
         // Arrange
         Product product = new Product();
         when(productService.saveProduct(any())).thenReturn(product);
@@ -69,7 +69,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void testUpdateProduct() throws Exception {
+     void testUpdateProduct() throws Exception {
         // Arrange
         long productId = 1L;
         Product updatedProduct = new Product();
@@ -84,7 +84,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void testDeleteProduct() throws Exception {
+     void testDeleteProduct() throws Exception {
         // Arrange
         long productId = 1L;
 
@@ -95,7 +95,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void testGetAllProductsByOwnerId() throws Exception {
+     void testGetAllProductsByOwnerId() throws Exception {
         // Arrange
         long ownerId = 1L;
         List<Product> products = Arrays.asList(new Product(), new Product());
@@ -108,7 +108,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void testAddProductToOwner() throws Exception {
+     void testAddProductToOwner() throws Exception {
         // Arrange
         long ownerId = 1L;
         long productId = 1L;
@@ -122,7 +122,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void testRemoveProductFromOwner() throws Exception {
+     void testRemoveProductFromOwner() throws Exception {
         // Arrange
         long ownerId = 1L;
         long productId = 1L;
@@ -133,7 +133,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void testUpdateProductForOwner() throws Exception {
+     void testUpdateProductForOwner() throws Exception {
         // Arrange
         long ownerId = 1L;
         long productId = 1L;

@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(CarController.class)
-public class CarControllerTest {
+ class CarControllerTest {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
@@ -33,7 +33,7 @@ public class CarControllerTest {
     private CarService carService;
 
     @Test
-    public void testGetAllCars() throws Exception {
+     void testGetAllCars() throws Exception {
         // Arrange
         List<Car> cars = Arrays.asList(new Car(), new Car());
         when(carService.getAllCars()).thenReturn(cars);
@@ -45,7 +45,7 @@ public class CarControllerTest {
     }
 
     @Test
-    public void testGetCarById() throws Exception {
+     void testGetCarById() throws Exception {
         // Arrange
         long carId = 1L;
         Car car = new Car();
@@ -58,7 +58,7 @@ public class CarControllerTest {
     }
 
     @Test
-    public void testSaveCar() throws Exception {
+     void testSaveCar() throws Exception {
         // Arrange
         Car car = new Car();
         when(carService.saveCar(any())).thenReturn(car);
@@ -73,7 +73,7 @@ public class CarControllerTest {
     }
 
     @Test
-    public void testUpdateCar() throws Exception {
+     void testUpdateCar() throws Exception {
         // Arrange
         long carId = 1L;
         Car updatedCar = new Car();
@@ -89,7 +89,7 @@ public class CarControllerTest {
     }
 
     @Test
-    public void testDeleteCar() throws Exception {
+     void testDeleteCar() throws Exception {
         // Arrange
         long carId = 1L;
 
@@ -100,7 +100,7 @@ public class CarControllerTest {
     }
 
     @Test
-    public void testCreateText() throws Exception {
+     void testCreateText() throws Exception {
         // Arrange
         String text = "Some text";
         Car car = new Car();
@@ -113,7 +113,7 @@ public class CarControllerTest {
     }
 
     @Test
-    public void testAddOwnerToCar() throws Exception {
+     void testAddOwnerToCar() throws Exception {
         // Arrange
         long carId = 1L;
         long ownerId = 1L;
@@ -124,7 +124,7 @@ public class CarControllerTest {
     }
 
     @Test
-    public void testRemoveOwnerFromCar() throws Exception {
+     void testRemoveOwnerFromCar() throws Exception {
         // Arrange
         long carId = 1L;
         long ownerId = 1L;
@@ -135,7 +135,7 @@ public class CarControllerTest {
     }
 
     @Test
-    public void testUpdateCarOwners() throws Exception {
+     void testUpdateCarOwners() throws Exception {
         // Arrange
         long carId = 1L;
         List<Long> ownerIds = Arrays.asList(1L, 2L, 3L);
@@ -148,7 +148,7 @@ public class CarControllerTest {
     }
 
     @Test
-    public void testGetAllOwnersOfCar() throws Exception {
+     void testGetAllOwnersOfCar() throws Exception {
         // Arrange
         long carId = 1L;
         List<Owner> owners = Arrays.asList(new Owner(), new Owner());
@@ -161,7 +161,7 @@ public class CarControllerTest {
     }
 
     @Test
-    public void testAddProductToCar() throws Exception {
+     void testAddProductToCar() throws Exception {
         // Arrange
         long carId = 1L;
         long productId = 1L;
@@ -172,7 +172,7 @@ public class CarControllerTest {
     }
 
     @Test
-    public void testRemoveProductFromCar() throws Exception {
+     void testRemoveProductFromCar() throws Exception {
         // Arrange
         long carId = 1L;
         long productId = 1L;
@@ -183,7 +183,7 @@ public class CarControllerTest {
     }
 
     @Test
-    public void testUpdateCarProducts() throws Exception {
+     void testUpdateCarProducts() throws Exception {
         // Arrange
         long carId = 1L;
         List<Long> productIds = Arrays.asList(1L, 2L, 3L);
@@ -196,7 +196,7 @@ public class CarControllerTest {
     }
 
     @Test
-    public void testGetAllProductsOfCar() throws Exception {
+     void testGetAllProductsOfCar() throws Exception {
         // Arrange
         long carId = 1L;
         List<Product> products = Arrays.asList(new Product(), new Product());

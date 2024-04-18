@@ -3,10 +3,10 @@ package com.example.demo.service;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CacheServiceTest {
+ class CacheServiceTest {
 
     @Test
-    public void testPutAndGet() {
+     void testPutAndGet() {
         // Arrange
         CacheService cacheService = new CacheService();
         String key = "testKey";
@@ -21,7 +21,7 @@ public class CacheServiceTest {
     }
 
     @Test
-    public void testRemove() {
+     void testRemove() {
         // Arrange
         CacheService cacheService = new CacheService();
         String key = "testKey";
@@ -37,7 +37,7 @@ public class CacheServiceTest {
     }
 
     @Test
-    public void testContainsKey() {
+     void testContainsKey() {
         // Arrange
         CacheService cacheService = new CacheService();
         String key = "testKey";

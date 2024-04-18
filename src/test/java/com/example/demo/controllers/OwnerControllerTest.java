@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(OwnerController.class)
-public class OwnerControllerTest {
+ class OwnerControllerTest {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
@@ -33,7 +33,7 @@ public class OwnerControllerTest {
     private OwnerService ownerService;
 
     @Test
-    public void testGetAllOwners() throws Exception {
+     void testGetAllOwners() throws Exception {
         // Arrange
         List<Owner> owners = Arrays.asList(new Owner(), new Owner());
         when(ownerService.getAllOwners()).thenReturn(owners);
@@ -45,7 +45,7 @@ public class OwnerControllerTest {
     }
 
     @Test
-    public void testGetOwnerById() throws Exception {
+     void testGetOwnerById() throws Exception {
         // Arrange
         long ownerId = 1L;
         Owner owner = new Owner();
@@ -58,7 +58,7 @@ public class OwnerControllerTest {
     }
 
     @Test
-    public void testCreateOwner() throws Exception {
+     void testCreateOwner() throws Exception {
         // Arrange
         Owner owner = new Owner();
         when(ownerService.saveOwner(any())).thenReturn(owner);
@@ -72,7 +72,7 @@ public class OwnerControllerTest {
     }
 
     @Test
-    public void testUpdateOwner() throws Exception {
+     void testUpdateOwner() throws Exception {
         // Arrange
         long ownerId = 1L;
         Owner updatedOwner = new Owner();
@@ -87,7 +87,7 @@ public class OwnerControllerTest {
     }
 
     @Test
-    public void testDeleteOwner() throws Exception {
+     void testDeleteOwner() throws Exception {
         // Arrange
         long ownerId = 1L;
 
@@ -98,7 +98,7 @@ public class OwnerControllerTest {
     }
 
     @Test
-    public void testGetAllProductsByOwnerId() throws Exception {
+     void testGetAllProductsByOwnerId() throws Exception {
         // Arrange
         long ownerId = 1L;
         List<Product> products = Arrays.asList(new Product(), new Product());
@@ -111,7 +111,7 @@ public class OwnerControllerTest {
     }
 
     @Test
-    public void testSaveProductForOwner() throws Exception {
+     void testSaveProductForOwner() throws Exception {
         // Arrange
         long ownerId = 1L;
         Product product = new Product();
@@ -126,7 +126,7 @@ public class OwnerControllerTest {
     }
 
     @Test
-    public void testAddCarToOwner() throws Exception {
+     void testAddCarToOwner() throws Exception {
         // Arrange
         long ownerId = 1L;
         long carId = 1L;
@@ -137,7 +137,7 @@ public class OwnerControllerTest {
     }
 
     @Test
-    public void testRemoveCarFromOwner() throws Exception {
+     void testRemoveCarFromOwner() throws Exception {
         // Arrange
         long ownerId = 1L;
         long carId = 1L;
@@ -148,7 +148,7 @@ public class OwnerControllerTest {
     }
 
     @Test
-    public void testUpdateOwnerCars() throws Exception {
+     void testUpdateOwnerCars() throws Exception {
         // Arrange
         long ownerId = 1L;
         List<Long> carIds = Arrays.asList(1L, 2L, 3L);
@@ -161,7 +161,7 @@ public class OwnerControllerTest {
     }
 
     @Test
-    public void testGetAllCarsOfOwner() throws Exception {
+     void testGetAllCarsOfOwner() throws Exception {
         // Arrange
         long ownerId = 1L;
         List<Car> cars = Arrays.asList(new Car(), new Car());
@@ -174,7 +174,7 @@ public class OwnerControllerTest {
     }
 
     @Test
-    public void testAddSeveralOwners() throws Exception {
+     void testAddSeveralOwners() throws Exception {
         // Arrange
         List<Owner> owners = Arrays.asList(new Owner(), new Owner());
         when(ownerService.saveOwner(any())).thenReturn(new Owner());

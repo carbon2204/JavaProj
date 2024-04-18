@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class OwnerServiceTest {
+ class OwnerServiceTest {
 
     @Mock
     private OwnerDao ownerDao;
@@ -29,7 +29,7 @@ public class OwnerServiceTest {
     private OwnerService ownerService;
 
     @Test
-    public void testGetAllOwners() {
+     void testGetAllOwners() {
         // Arrange
         List<Owner> owners = new ArrayList<>();
         owners.add(new Owner());
@@ -44,7 +44,7 @@ public class OwnerServiceTest {
     }
 
     @Test
-    public void testGetOwnerById_Exists() {
+     void testGetOwnerById_Exists() {
         // Arrange
         long ownerId = 1L;
         Owner owner = new Owner();
@@ -58,7 +58,7 @@ public class OwnerServiceTest {
     }
 
     @Test
-    public void testGetOwnerById_NotExists() {
+     void testGetOwnerById_NotExists() {
         // Arrange
         long ownerId = 1L;
         when(ownerDao.getOwnerById(ownerId)).thenReturn(null);
@@ -71,7 +71,7 @@ public class OwnerServiceTest {
     }
 
     @Test
-    public void testSaveOwner() {
+     void testSaveOwner() {
         // Arrange
         Owner owner = new Owner();
         when(ownerDao.saveOwner(owner)).thenReturn(owner);
@@ -84,7 +84,7 @@ public class OwnerServiceTest {
     }
 
     @Test
-    public void testDeleteOwner() {
+     void testDeleteOwner() {
         // Arrange
         long ownerId = 1L;
 
@@ -96,7 +96,7 @@ public class OwnerServiceTest {
     }
 
     @Test
-    public void testUpdateOwner() {
+     void testUpdateOwner() {
         // Arrange
         long ownerId = 1L;
         Owner owner = new Owner();
@@ -113,7 +113,7 @@ public class OwnerServiceTest {
     }
 
     @Test
-    public void testGetAllProductsByOwnerId() {
+     void testGetAllProductsByOwnerId() {
         // Arrange
         long ownerId = 1L;
         Owner owner = new Owner();
@@ -131,7 +131,7 @@ public class OwnerServiceTest {
     }
 
     @Test
-    public void testSaveProductForOwner() {
+     void testSaveProductForOwner() {
         // Arrange
         long ownerId = 1L;
         Product product = new Product();
@@ -147,7 +147,7 @@ public class OwnerServiceTest {
     }
 
     @Test
-    public void testAddCarToOwner() {
+     void testAddCarToOwner() {
         // Arrange
         long ownerId = 1L;
         long carId = 1L;
@@ -165,7 +165,7 @@ public class OwnerServiceTest {
     }
 
     @Test
-    public void testRemoveCarFromOwner() {
+     void testRemoveCarFromOwner() {
         // Arrange
         long ownerId = 1L;
         long carId = 1L;
@@ -183,7 +183,7 @@ public class OwnerServiceTest {
     }
 
     @Test
-    public void testUpdateOwnerCars() {
+     void testUpdateOwnerCars() {
         // Arrange
         long ownerId = 1L;
         List<Long> carIds = List.of(1L, 2L, 3L);
@@ -208,7 +208,7 @@ public class OwnerServiceTest {
     }
 
     @Test
-    public void testGetAllCarsOfOwner() {
+     void testGetAllCarsOfOwner() {
         // Arrange
         long ownerId = 1L;
         Owner owner = new Owner();

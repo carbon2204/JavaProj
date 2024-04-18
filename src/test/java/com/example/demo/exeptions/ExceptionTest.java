@@ -11,13 +11,13 @@ import org.springframework.web.server.ResponseStatusException;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ExceptionTest {
+ class ExceptionTest {
 
     @InjectMocks
     private ExceptionsHandler exceptionsHandler;
 
     @Test
-    public void testHandleRuntimeException() {
+     void testHandleRuntimeException() {
         // Arrange
         RuntimeException ex = new RuntimeException("Test runtime exception");
 
@@ -30,7 +30,7 @@ public class ExceptionTest {
     }
 
     @Test
-    public void testHandleNotFoundException() {
+     void testHandleNotFoundException() {
         // Arrange
         ResponseStatusException ex = new ResponseStatusException(HttpStatus.NOT_FOUND, "Test not found exception");
 
@@ -43,7 +43,7 @@ public class ExceptionTest {
     }
 
     @Test
-    public void testHandleBadRequestException() {
+     void testHandleBadRequestException() {
         // Arrange
         HttpClientErrorException ex = new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Test bad request exception");
 
@@ -56,7 +56,7 @@ public class ExceptionTest {
     }
 
     @Test
-    public void testHandleMethodNotAllowed() {
+     void testHandleMethodNotAllowed() {
         // Arrange
         HttpRequestMethodNotSupportedException ex = new HttpRequestMethodNotSupportedException("GET");
 

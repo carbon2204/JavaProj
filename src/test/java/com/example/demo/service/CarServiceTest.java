@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class CarServiceTest {
+ class CarServiceTest {
 
     @Mock
     private CarDao carDao;
@@ -40,7 +40,7 @@ public class CarServiceTest {
     private CarService carService;
 
     @Test
-    public void testGetAllCars() {
+     void testGetAllCars() {
         // Arrange
         List<Car> expectedCars = Arrays.asList(new Car(), new Car());
         when(carDao.getAllCars()).thenReturn(expectedCars);
@@ -53,7 +53,7 @@ public class CarServiceTest {
     }
 
     @Test
-    public void testGetCarById() {
+     void testGetCarById() {
         // Arrange
         long carId = 1L;
         Car expectedCar = new Car();
@@ -67,7 +67,7 @@ public class CarServiceTest {
     }
 
     @Test
-    public void testSaveCar() {
+     void testSaveCar() {
         // Arrange
         Car carToSave = new Car();
         when(carDao.saveCar(carToSave)).thenReturn(carToSave);
@@ -80,7 +80,7 @@ public class CarServiceTest {
     }
 
     @Test
-    public void testUpdateCar() {
+     void testUpdateCar() {
         // Arrange
         long carId = 1L;
         Car carToUpdate = new Car();
@@ -94,7 +94,7 @@ public class CarServiceTest {
     }
 
     @Test
-    public void testDeleteCar() {
+     void testDeleteCar() {
         // Arrange
         long carId = 1L;
 
@@ -106,7 +106,7 @@ public class CarServiceTest {
     }
 
     @Test
-    public void testAnalyzeText() {
+     void testAnalyzeText() {
         // Arrange
         String text = "VIN: 123456789\nБренд: Toyota\nМодель: Camry\nГод: 2020";
 
@@ -122,7 +122,7 @@ public class CarServiceTest {
     }
 
     @Test
-    public void testAddOwnerToCar() {
+     void testAddOwnerToCar() {
         // Arrange
         long carId = 1L;
         long ownerId = 1L;
@@ -140,7 +140,7 @@ public class CarServiceTest {
     }
 
     @Test
-    public void testRemoveOwnerFromCar() {
+     void testRemoveOwnerFromCar() {
         // Arrange
         long carId = 1L;
         long ownerId = 1L;
@@ -157,7 +157,7 @@ public class CarServiceTest {
     }
 
     @Test
-    public void testUpdateCarOwners() {
+     void testUpdateCarOwners() {
         // Arrange
         long carId = 1L;
         long ownerId1 = 1L;
@@ -178,7 +178,7 @@ public class CarServiceTest {
     }
 
     @Test
-    public void testGetAllOwnersOfCar() {
+     void testGetAllOwnersOfCar() {
         // Arrange
         long carId = 1L;
         Car car = new Car();
@@ -196,7 +196,7 @@ public class CarServiceTest {
     }
 
     @Test
-    public void testAddProductToCar() {
+     void testAddProductToCar() {
         // Arrange
         long carId = 1L;
         long productId = 1L;
@@ -214,7 +214,7 @@ public class CarServiceTest {
     }
 
     @Test
-    public void testRemoveProductFromCar() {
+     void testRemoveProductFromCar() {
         // Arrange
         long carId = 1L;
         long productId = 1L;
@@ -231,7 +231,7 @@ public class CarServiceTest {
     }
 
     @Test
-    public void testUpdateCarProducts() {
+     void testUpdateCarProducts() {
         // Arrange
         long carId = 1L;
         long productId1 = 1L;
@@ -252,7 +252,7 @@ public class CarServiceTest {
     }
 
     @Test
-    public void testGetAllProductsOfCar() {
+     void testGetAllProductsOfCar() {
         // Arrange
         long carId = 1L;
         Car car = new Car();

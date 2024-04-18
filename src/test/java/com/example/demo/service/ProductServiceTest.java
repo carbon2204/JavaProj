@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ProductServiceTest {
+ class ProductServiceTest {
 
     @Mock
     private ProductDao productDao;
@@ -30,7 +30,7 @@ public class ProductServiceTest {
     private ProductService productService;
 
     @Test
-    public void testGetAllProducts() {
+     void testGetAllProducts() {
         // Arrange
         List<Product> products = List.of(new Product(), new Product());
         when(productDao.getAllProducts()).thenReturn(products);
@@ -43,7 +43,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testGetProductById_Exists() {
+     void testGetProductById_Exists() {
         // Arrange
         long productId = 1L;
         Product product = new Product();
@@ -57,7 +57,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testGetProductById_NotExists() {
+     void testGetProductById_NotExists() {
         // Arrange
         long productId = 1L;
         when(productDao.getProductById(productId)).thenReturn(null);
@@ -70,7 +70,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testSaveProduct() {
+     void testSaveProduct() {
         // Arrange
         Product product = new Product();
         when(productDao.saveProduct(product)).thenReturn(product);
@@ -83,7 +83,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testUpdateProduct() {
+     void testUpdateProduct() {
         // Arrange
         long productId = 1L;
         Product existingProduct = new Product();
@@ -99,7 +99,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testDeleteProduct() {
+     void testDeleteProduct() {
         // Arrange
         long productId = 1L;
 
@@ -111,7 +111,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testFindAllProductsByOwnerId() {
+     void testFindAllProductsByOwnerId() {
         // Arrange
         long ownerId = 1L;
         List<Product> products = List.of(new Product(), new Product());
@@ -125,7 +125,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testAddProductToOwner() {
+     void testAddProductToOwner() {
         // Arrange
         long ownerId = 1L;
         long productId = 1L;
@@ -146,7 +146,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testRemoveProductFromOwner() {
+     void testRemoveProductFromOwner() {
         // Arrange
         long ownerId = 1L;
         long productId = 1L;
@@ -165,7 +165,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testUpdateProductForOwner() {
+     void testUpdateProductForOwner() {
         // Arrange
         long ownerId = 1L;
         long productId = 1L;
