@@ -5,223 +5,192 @@ import com.example.demo.dao.OwnerDao;
 import com.example.demo.model.Car;
 import com.example.demo.model.Owner;
 import com.example.demo.model.Product;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import java.util.ArrayList;
-import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 
 @ExtendWith(MockitoExtension.class)
- class OwnerServiceTest {
+class OwnerServiceTest {
 
-    @Mock
-    private OwnerDao ownerDao;
+  @Mock
+  private OwnerDao ownerDao;
 
-    @Mock
-    private CarDao carDao;
+  @Mock
+  private CarDao carDao;
 
-    @InjectMocks
-    private OwnerService ownerService;
+  @InjectMocks
+  private OwnerService ownerService;
 
-    @Test
-     void testGetAllOwners() {
-        // Arrange
-        List<Owner> owners = new ArrayList<>();
-        owners.add(new Owner());
-        owners.add(new Owner());
-        when(ownerDao.getAllOwners()).thenReturn(owners);
+  @Test
+  void testGetAllOwners() {
+    List<Owner> owners = new ArrayList<>();
+    owners.add(new Owner());
+    owners.add(new Owner());
+    when(ownerDao.getAllOwners()).thenReturn(owners);
 
-        // Act
-        List<Owner> result = ownerService.getAllOwners();
+    List<Owner> result = ownerService.getAllOwners();
 
-        // Assert
-        assertEquals(owners.size(), result.size());
+    assertEquals(owners.size(), result.size());
+  }
+
+  @Test
+  void testGetOwnerById_Exists() {
+    long ownerId = 1L;
+    Owner owner = new Owner();
+    when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
+
+    Owner result = ownerService.getOwnerById(ownerId);
+
+    assertEquals(owner, result);
+  }
+
+  @Test
+  void testGetOwnerById_NotExists() {
+    long ownerId = 1L;
+    when(ownerDao.getOwnerById(ownerId)).thenReturn(null);
+
+    Owner result = ownerService.getOwnerById(ownerId);
+
+    assertNull(result);
+  }
+
+  @Test
+  void testSaveOwner() {
+    Owner owner = new Owner();
+    when(ownerDao.saveOwner(owner)).thenReturn(owner);
+
+    Owner result = ownerService.saveOwner(owner);
+
+    assertEquals(owner, result);
+  }
+
+  @Test
+  void testDeleteOwner() {
+    long ownerId = 1L;
+
+    ownerService.deleteOwner(ownerId);
+
+    verify(ownerDao, times(1)).deleteOwner(ownerId);
+  }
+
+  @Test
+  void testUpdateOwner() {
+    long ownerId = 1L;
+    Owner owner = new Owner();
+    Owner updatedOwner = new Owner();
+    updatedOwner.setId(ownerId);
+    when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
+    when(ownerDao.saveOwner(updatedOwner)).thenReturn(updatedOwner);
+
+    Owner result = ownerService.updateOwner(ownerId, updatedOwner);
+
+    assertEquals(updatedOwner, result);
+  }
+
+  @Test
+  void testGetAllProductsByOwnerId() {
+    final long ownerId = 1L;
+    Owner owner = new Owner();
+    List<Product> products = new ArrayList<>();
+    products.add(new Product());
+    products.add(new Product());
+    owner.setProducts(products);
+    when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
+
+    List<Product> result = ownerService.getAllProductsByOwnerId(ownerId);
+
+    assertEquals(products.size(), result.size());
+  }
+
+  @Test
+  void testSaveProductForOwner() {
+    long ownerId = 1L;
+    Product product = new Product();
+    Owner owner = new Owner();
+    when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
+    when(ownerDao.saveProductForOwner(owner, product)).thenReturn(product);
+
+    Product result = ownerService.saveProductForOwner(ownerId, product);
+
+    assertEquals(product, result);
+  }
+
+  @Test
+  void testAddCarToOwner() {
+    long ownerId = 1L;
+    long carId = 1L;
+    Owner owner = new Owner();
+    Car car = new Car();
+    when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
+    when(carDao.getCarById(carId)).thenReturn(car);
+
+    ownerService.addCarToOwner(ownerId, carId);
+
+    assertEquals(1, owner.getCars().size());
+    assertEquals(car, owner.getCars().get(0));
+  }
+
+  @Test
+  void testRemoveCarFromOwner() {
+    long ownerId = 1L;
+    long carId = 1L;
+    Owner owner = new Owner();
+    Car car = new Car();
+    car.setId(carId);
+    owner.getCars().add(car);
+    when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
+
+    ownerService.removeCarFromOwner(ownerId, carId);
+
+    assertEquals(0, owner.getCars().size());
+  }
+
+  @Test
+  void testUpdateOwnerCars() {
+    long ownerId = 1L;
+    List<Long> carIds = List.of(1L, 2L, 3L);
+    Owner owner = new Owner();
+    List<Car> cars = new ArrayList<>();
+    for (Long id : carIds) {
+      Car car = new Car();
+      car.setId(id);
+      cars.add(car);
     }
+    when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
+    when(carDao.getCarById(anyLong())).thenAnswer(invocation -> {
+      Long id = invocation.getArgument(0);
+      return cars.stream().filter(car -> car.getId().equals(id)).findFirst().orElse(null);
+    });
 
-    @Test
-     void testGetOwnerById_Exists() {
-        // Arrange
-        long ownerId = 1L;
-        Owner owner = new Owner();
-        when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
+    ownerService.updateOwnerCars(ownerId, carIds);
 
-        // Act
-        Owner result = ownerService.getOwnerById(ownerId);
+    assertEquals(cars.size(), owner.getCars().size());
+  }
 
-        // Assert
-        assertEquals(owner, result);
-    }
+  @Test
+  void testGetAllCarsOfOwner() {
+    final long ownerId = 1L;
+    Owner owner = new Owner();
+    List<Car> cars = new ArrayList<>();
+    cars.add(new Car());
+    cars.add(new Car());
+    owner.setCars(cars);
+    when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
 
-    @Test
-     void testGetOwnerById_NotExists() {
-        // Arrange
-        long ownerId = 1L;
-        when(ownerDao.getOwnerById(ownerId)).thenReturn(null);
+    List<Car> result = ownerService.getAllCarsOfOwner(ownerId);
 
-        // Act
-        Owner result = ownerService.getOwnerById(ownerId);
-
-        // Assert
-        assertNull(result);
-    }
-
-    @Test
-     void testSaveOwner() {
-        // Arrange
-        Owner owner = new Owner();
-        when(ownerDao.saveOwner(owner)).thenReturn(owner);
-
-        // Act
-        Owner result = ownerService.saveOwner(owner);
-
-        // Assert
-        assertEquals(owner, result);
-    }
-
-    @Test
-     void testDeleteOwner() {
-        // Arrange
-        long ownerId = 1L;
-
-        // Act
-        ownerService.deleteOwner(ownerId);
-
-        // Assert
-        verify(ownerDao, times(1)).deleteOwner(ownerId);
-    }
-
-    @Test
-     void testUpdateOwner() {
-        // Arrange
-        long ownerId = 1L;
-        Owner owner = new Owner();
-        Owner updatedOwner = new Owner();
-        updatedOwner.setId(ownerId);
-        when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
-        when(ownerDao.saveOwner(updatedOwner)).thenReturn(updatedOwner);
-
-        // Act
-        Owner result = ownerService.updateOwner(ownerId, updatedOwner);
-
-        // Assert
-        assertEquals(updatedOwner, result);
-    }
-
-    @Test
-     void testGetAllProductsByOwnerId() {
-        // Arrange
-        long ownerId = 1L;
-        Owner owner = new Owner();
-        List<Product> products = new ArrayList<>();
-        products.add(new Product());
-        products.add(new Product());
-        owner.setProducts(products);
-        when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
-
-        // Act
-        List<Product> result = ownerService.getAllProductsByOwnerId(ownerId);
-
-        // Assert
-        assertEquals(products.size(), result.size());
-    }
-
-    @Test
-     void testSaveProductForOwner() {
-        // Arrange
-        long ownerId = 1L;
-        Product product = new Product();
-        Owner owner = new Owner();
-        when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
-        when(ownerDao.saveProductForOwner(owner, product)).thenReturn(product);
-
-        // Act
-        Product result = ownerService.saveProductForOwner(ownerId, product);
-
-        // Assert
-        assertEquals(product, result);
-    }
-
-    @Test
-     void testAddCarToOwner() {
-        // Arrange
-        long ownerId = 1L;
-        long carId = 1L;
-        Owner owner = new Owner();
-        Car car = new Car();
-        when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
-        when(carDao.getCarById(carId)).thenReturn(car);
-
-        // Act
-        ownerService.addCarToOwner(ownerId, carId);
-
-        // Assert
-        assertEquals(1, owner.getCars().size());
-        assertEquals(car, owner.getCars().get(0));
-    }
-
-    @Test
-     void testRemoveCarFromOwner() {
-        // Arrange
-        long ownerId = 1L;
-        long carId = 1L;
-        Owner owner = new Owner();
-        Car car = new Car();
-        car.setId(carId);
-        owner.getCars().add(car);
-        when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
-
-        // Act
-        ownerService.removeCarFromOwner(ownerId, carId);
-
-        // Assert
-        assertEquals(0, owner.getCars().size());
-    }
-
-    @Test
-     void testUpdateOwnerCars() {
-        // Arrange
-        long ownerId = 1L;
-        List<Long> carIds = List.of(1L, 2L, 3L);
-        Owner owner = new Owner();
-        List<Car> cars = new ArrayList<>();
-        for (Long id : carIds) {
-            Car car = new Car();
-            car.setId(id);
-            cars.add(car);
-        }
-        when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
-        when(carDao.getCarById(anyLong())).thenAnswer(invocation -> {
-            Long id = invocation.getArgument(0);
-            return cars.stream().filter(car -> car.getId().equals(id)).findFirst().orElse(null);
-        });
-
-        // Act
-        ownerService.updateOwnerCars(ownerId, carIds);
-
-        // Assert
-        assertEquals(cars.size(), owner.getCars().size());
-    }
-
-    @Test
-     void testGetAllCarsOfOwner() {
-        // Arrange
-        long ownerId = 1L;
-        Owner owner = new Owner();
-        List<Car> cars = new ArrayList<>();
-        cars.add(new Car());
-        cars.add(new Car());
-        owner.setCars(cars);
-        when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
-
-        // Act
-        List<Car> result = ownerService.getAllCarsOfOwner(ownerId);
-
-        // Assert
-        assertEquals(cars.size(), result.size());
-    }
+    assertEquals(cars.size(), result.size());
+  }
 }

@@ -8,63 +8,56 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 @ExtendWith(MockitoExtension.class)
  class ExceptionTest {
 
-    @InjectMocks
-    private ExceptionsHandler exceptionsHandler;
+  @InjectMocks
+  private ExceptionsHandler exceptionsHandler;
 
-    @Test
-     void testHandleRuntimeException() {
-        // Arrange
-        RuntimeException ex = new RuntimeException("Test runtime exception");
+  @Test
+  void testHandleRuntimeException() {
+    RuntimeException ex = new RuntimeException("Test runtime exception");
 
-        // Act
-        ErrorMessage result = exceptionsHandler.runtimeError(ex);
+    ErrorMessage result = exceptionsHandler.runtimeError(ex);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals("Internal server error", result.message());
-    }
+    assertNotNull(result);
+    assertEquals("Internal server error", result.message());
+  }
 
-    @Test
-     void testHandleNotFoundException() {
-        // Arrange
-        ResponseStatusException ex = new ResponseStatusException(HttpStatus.NOT_FOUND, "Test not found exception");
+  @Test
+  void testHandleNotFoundException() {
+    ResponseStatusException ex = new ResponseStatusException(HttpStatus.NOT_FOUND,
+            "Test not found exception");
 
-        // Act
-        ErrorMessage result = exceptionsHandler.notFoundException(ex);
+    ErrorMessage result = exceptionsHandler.notFoundException(ex);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals("Resource not found", result.message());
-    }
+    assertNotNull(result);
+    assertEquals("Resource not found", result.message());
+  }
 
-    @Test
-     void testHandleBadRequestException() {
-        // Arrange
-        HttpClientErrorException ex = new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Test bad request exception");
+  @Test
+  void testHandleBadRequestException() {
+    HttpClientErrorException ex = new HttpClientErrorException(HttpStatus.BAD_REQUEST,
+            "Test bad request exception");
 
-        // Act
-        ErrorMessage result = exceptionsHandler.handleBadRequestException(ex);
+    ErrorMessage result = exceptionsHandler.handleBadRequestException(ex);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals("Bad request", result.message());
-    }
+    assertNotNull(result);
+    assertEquals("Bad request", result.message());
+  }
 
-    @Test
-     void testHandleMethodNotAllowed() {
-        // Arrange
-        HttpRequestMethodNotSupportedException ex = new HttpRequestMethodNotSupportedException("GET");
+  @Test
+  void testHandleMethodNotAllowed() {
+    HttpRequestMethodNotSupportedException ex = new HttpRequestMethodNotSupportedException("GET");
 
-        // Act
-        ErrorMessage result = exceptionsHandler.handleMethodNotAllowed(ex);
+    ErrorMessage result = exceptionsHandler.handleMethodNotAllowed(ex);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals("Method not allowed", result.message());
-    }
+    assertNotNull(result);
+    assertEquals("Method not allowed", result.message());
+  }
 }

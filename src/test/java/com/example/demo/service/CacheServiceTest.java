@@ -1,54 +1,49 @@
 package com.example.demo.service;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
- class CacheServiceTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-    @Test
-     void testPutAndGet() {
-        // Arrange
-        CacheService cacheService = new CacheService();
-        String key = "testKey";
-        Object value = "testValue";
 
-        // Act
-        cacheService.put(key, value);
-        Object retrievedValue = cacheService.get(key);
+class CacheServiceTest {
 
-        // Assert
-        assertEquals(value, retrievedValue);
-    }
+  @Test
+  void testPutAndGet() {
+    CacheService cacheService = new CacheService();
+    String key = "testKey";
+    Object value = "testValue";
 
-    @Test
-     void testRemove() {
-        // Arrange
-        CacheService cacheService = new CacheService();
-        String key = "testKey";
-        Object value = "testValue";
+    cacheService.put(key, value);
+    Object retrievedValue = cacheService.get(key);
 
-        // Act
-        cacheService.put(key, value);
-        cacheService.remove(key);
-        boolean containsKey = cacheService.containsKey(key);
+    assertEquals(value, retrievedValue);
+  }
 
-        // Assert
-        assertFalse(containsKey);
-    }
+  @Test
+  void testRemove() {
+    CacheService cacheService = new CacheService();
+    String key = "testKey";
+    Object value = "testValue";
 
-    @Test
-     void testContainsKey() {
-        // Arrange
-        CacheService cacheService = new CacheService();
-        String key = "testKey";
-        Object value = "testValue";
+    cacheService.put(key, value);
+    cacheService.remove(key);
+    boolean containsKey = cacheService.containsKey(key);
 
-        // Act
-        cacheService.put(key, value);
-        boolean containsKey = cacheService.containsKey(key);
+    assertFalse(containsKey);
+  }
 
-        // Assert
-        assertTrue(containsKey);
-    }
+  @Test
+  void testContainsKey() {
+    CacheService cacheService = new CacheService();
+    String key = "testKey";
+    Object value = "testValue";
+
+    cacheService.put(key, value);
+    boolean containsKey = cacheService.containsKey(key);
+
+    assertTrue(containsKey);
+  }
 }
 
