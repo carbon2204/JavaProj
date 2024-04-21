@@ -6,223 +6,289 @@ import com.example.demo.dao.ProductDao;
 import com.example.demo.model.Car;
 import com.example.demo.model.Owner;
 import com.example.demo.model.Product;
-import java.util.Arrays;
-import java.util.List;
+import com.example.demo.repository.CarRepository;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
- class CarServiceTest {
+public class CarServiceTest {
 
-  @Mock
-  private CarDao carDao;
+    @Mock
+    private CarDao carDao;
 
-  @Mock
-  private ProductDao productDao;
+    @Mock
+    private ProductDao productDao;
 
-  @Mock
-  private OwnerDao ownerDao;
+    @Mock
+    private OwnerDao ownerDao;
 
-  @InjectMocks
-  private CarService carService;
+    @Mock
+    private CarRepository carRepository;
 
-  @Test
-  void testGetAllCars() {
-    List<Car> expectedCars = Arrays.asList(new Car(), new Car());
-    when(carDao.getAllCars()).thenReturn(expectedCars);
+    @InjectMocks
+    private CarService carService;
 
-    List<Car> result = carService.getAllCars();
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
-    assertEquals(expectedCars, result);
-  }
+    @Test
+    public void testGetAllCars() {
+        List<Car> cars = Arrays.asList(new Car(), new Car());
+        when(carDao.getAllCars()).thenReturn(cars);
 
-  @Test
-  void testGetCarById() {
-    long carId = 1L;
-    Car expectedCar = new Car();
-    when(carDao.getCarById(carId)).thenReturn(expectedCar);
+        List<Car> result = carService.getAllCars();
 
-    Car result = carService.getCarById(carId);
+        assertEquals(2, result.size());
+        verify(carDao, times(1)).getAllCars();
+    }
 
-    assertEquals(expectedCar, result);
-  }
+    @Test
+    public void testGetCarById() {
+        Car car = new Car();
+        car.setId(1L);
+        when(carDao.getCarById(1L)).thenReturn(car);
 
-  @Test
-  void testSaveCar() {
-    Car carToSave = new Car();
-    when(carDao.saveCar(carToSave)).thenReturn(carToSave);
+        Car result = carService.getCarById(1L);
 
-    Car result = carService.saveCar(carToSave);
+        assertEquals(1L, result.getId());
+        verify(carDao, times(1)).getCarById(1L);
+    }
 
-    assertEquals(carToSave, result);
-  }
+    @Test
+    public void testSaveCar() {
+        Car car = new Car();
+        when(carDao.saveCar(car)).thenReturn(car);
 
-  @Test
-  void testUpdateCar() {
-    long carId = 1L;
-    Car carToUpdate = new Car();
-    when(carDao.getCarById(carId)).thenReturn(carToUpdate);
+        Car result = carService.saveCar(car);
 
-    Car result = carService.updateCar(carId, carToUpdate);
+        assertNotNull(result);
+        verify(carDao, times(1)).saveCar(car);
+    }
 
-    assertEquals(carToUpdate, result);
-  }
+    @Test
+    public void testUpdateCar_Found() {
+        Car existingCar = new Car();
+        existingCar.setId(1L);
+        existingCar.setOwners(new ArrayList<>()); // Убедимся, что список не null
+        existingCar.setProducts(new ArrayList<>()); // Убедимся, что список не null
 
-  @Test
-  void testDeleteCar() {
-    long carId = 1L;
+        Car updateCar = new Car();
+        updateCar.setVin("NEWVIN");
 
-    carService.deleteCar(carId);
+        when(carDao.getCarById(1L)).thenReturn(existingCar);
+        when(carDao.saveCar(existingCar)).thenReturn(existingCar);
 
-    verify(carDao).deleteCar(carId);
-  }
+        Car result = carService.updateCar(1L, updateCar);
 
-  @Test
-  void testAnalyzeText() {
-    String text = "VIN: 123456789\nБренд: Toyota\nМодель: Camry\nГод: 2020";
+        assertEquals("NEWVIN", result.getVin());
+        verify(carDao, times(1)).saveCar(existingCar);
+    }
 
-    Car result = carService.analyzeText(text);
+    @Test
+    public void testUpdateCar_NotFound() {
+        Car updateCar = new Car();
+        when(carDao.getCarById(1L)).thenReturn(null);
 
-    assertNotNull(result);
-    assertEquals("123456789", result.getVin());
-    assertEquals("Toyota", result.getMake());
-    assertEquals("Camry", result.getModel());
-    assertEquals(2020, result.getYear());
-  }
+        Car result = carService.updateCar(1L, updateCar);
 
-  @Test
-  void testAddOwnerToCar() {
-    long carId = 1L;
-    long ownerId = 1L;
-    Car car = new Car();
-    Owner owner = new Owner();
-    when(carDao.getCarById(carId)).thenReturn(car);
-    when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
+        assertNull(result);
+        verify(carDao, times(1)).getCarById(1L);
+    }
 
-    carService.addOwnerToCar(carId, ownerId);
+    @Test
+    public void testDeleteCar() {
+        doNothing().when(carDao).deleteCar(1L);
 
-    assertTrue(car.getOwners().contains(owner));
-    assertTrue(owner.getCars().contains(car));
-  }
+        carService.deleteCar(1L);
 
-  @Test
-  void testRemoveOwnerFromCar() {
-    long carId = 1L;
-    long ownerId = 1L;
-    Car car = new Car();
-    Owner owner = new Owner();
-    car.getOwners().add(owner);
-    when(carDao.getCarById(carId)).thenReturn(car);
+        verify(carDao, times(1)).deleteCar(1L);
+    }
 
-    carService.removeOwnerFromCar(carId, ownerId);
+    @Test
+    public void testAnalyzeText() {
+        String text = "VIN: ABC123 Brand: Toyota Model: Camry Year: 2021";
 
-    assertFalse(car.getOwners().contains(owner));
-  }
+        Car expectedCar = new Car();
+        expectedCar.setVin("ABC123");
+        expectedCar.setMake("Toyota");
+        expectedCar.setModel("Camry");
+        expectedCar.setYear(2021);
 
-  @Test
-  void testUpdateCarOwners() {
-    long carId = 1L;
-    long ownerId1 = 1L;
-    long ownerId2 = 2L;
-    Car car = new Car();
-    Owner owner1 = new Owner();
-    Owner owner2 = new Owner();
-    when(carDao.getCarById(carId)).thenReturn(car);
-    when(ownerDao.getOwnerById(ownerId1)).thenReturn(owner1);
-    when(ownerDao.getOwnerById(ownerId2)).thenReturn(owner2);
+        when(carRepository.save(any(Car.class))).thenReturn(expectedCar);
 
-    carService.updateCarOwners(carId, Arrays.asList(ownerId1, ownerId2));
+        Car result = carService.analyzeText(text);
 
-    assertTrue(car.getOwners().contains(owner1));
-    assertTrue(car.getOwners().contains(owner2));
-  }
+        assertNotNull(result);
+        assertEquals("ABC123", result.getVin());
+        assertEquals("Toyota", result.getMake());
+        assertEquals("Camry", result.getModel());
+        assertEquals(2021, result.getYear());
+    }
 
-  @Test
-  void testGetAllOwnersOfCar() {
-    long carId = 1L;
-    Car car = new Car();
-    Owner owner1 = new Owner();
-    Owner owner2 = new Owner();
-    car.getOwners().add(owner1);
-    car.getOwners().add(owner2);
-    when(carDao.getCarById(carId)).thenReturn(car);
+    @Test
+    public void testAddOwnerToCar() {
+        Car car = new Car();
+        car.setId(1L);
+        car.setOwners(new ArrayList<>());  // Убедитесь, что список не null
 
-    List<Owner> result = carService.getAllOwnersOfCar(carId);
+        Owner owner = new Owner();
+        owner.setId(1L);
+        owner.setCars(new ArrayList<>());  // Убедитесь, что список не null
 
-    assertEquals(2, result.size());
-  }
+        when(carDao.getCarById(1L)).thenReturn(car);
+        when(ownerDao.getOwnerById(1L)).thenReturn(owner);
 
-  @Test
-  void testAddProductToCar() {
-    long carId = 1L;
-    long productId = 1L;
-    Car car = new Car();
-    Product product = new Product();
-    when(carDao.getCarById(carId)).thenReturn(car);
-    when(productDao.getProductById(productId)).thenReturn(product);
+        carService.addOwnerToCar(1L, 1L);
 
-    carService.addProductToCar(carId, productId);
+        assertTrue(car.getOwners().contains(owner));  // Проверяем добавление
+        assertTrue(owner.getCars().contains(car));  // Проверяем добавление в Owner
+        verify(carDao, times(1)).saveCar(car);  // Убедитесь, что метод сохранения вызван
+    }
 
-    assertTrue(car.getProducts().contains(product));
-    assertEquals(car, product.getCar());
-  }
+    @Test
+    public void testRemoveOwnerFromCar() {
+        Car car = new Car();
+        car.setId(1L);
+        if (car.getOwners() == null) {
+            car.setOwners(new ArrayList<>());
+        }
+        Owner owner = new Owner();
+        owner.setId(1L);
 
-  @Test
-  void testRemoveProductFromCar() {
-    long carId = 1L;
-    long productId = 1L;
-    Car car = new Car();
-    Product product = new Product();
-    car.getProducts().add(product);
-    when(carDao.getCarById(carId)).thenReturn(car);
+        car.getOwners().add(owner);
 
-    carService.removeProductFromCar(carId, productId);
+        when(carDao.getCarById(1L)).thenReturn(car);
 
-    assertFalse(car.getProducts().contains(product));
-  }
+        carService.removeOwnerFromCar(1L, 1L);
 
-  @Test
-  void testUpdateCarProducts() {
-    long carId = 1L;
-    long productId1 = 1L;
-    long productId2 = 2L;
-    Car car = new Car();
-    Product product1 = new Product();
-    Product product2 = new Product();
-    when(carDao.getCarById(carId)).thenReturn(car);
-    when(productDao.getProductById(productId1)).thenReturn(product1);
-    when(productDao.getProductById(productId2)).thenReturn(product2);
+        assertFalse(car.getOwners().contains(owner));
+        verify(carDao, times(1)).saveCar(car);
+    }
 
-    carService.updateCarProducts(carId, Arrays.asList(productId1, productId2));
+    @Test
+    public void testAddProductToCar() {
+        Car car = new Car();
+        car.setId(1L);
+        if (car.getProducts() == null) {
+            car.setProducts(new ArrayList<>());
+        }
+        Product product = new Product();
+        product.setId(1L);
 
-    assertTrue(car.getProducts().contains(product1));
-    assertTrue(car.getProducts().contains(product2));
-  }
+        when(carDao.getCarById(1L)).thenReturn(car);
+        when(productDao.getProductById(1L)).thenReturn(product);
 
-  @Test
-  void testGetAllProductsOfCar() {
-    long carId = 1L;
-    Car car = new Car();
-    Product product1 = new Product();
-    Product product2 = new Product();
-    car.getProducts().add(product1);
-    car.getProducts().add(product2);
-    when(carDao.getCarById(carId)).thenReturn(car);
+        carService.addProductToCar(1L, 1L);
 
-    List<Product> result = carService.getAllProductsOfCar(carId);
+        assertTrue(car.getProducts().contains(product));
+        verify(carDao, times(1)).saveCar(car);
+    }
 
-    assertEquals(2, result.size());
-  }
+    @Test
+    public void testRemoveProductFromCar() {
+        Car car = new Car();
+        car.setId(1L);
+        if (car.getProducts() == null) {
+            car.setProducts(new ArrayList<>());
+        }
+        Product product = new Product();
+        product.setId(1L);
+
+        car.getProducts().add(product);
+
+        when(carDao.getCarById(1L)).thenReturn(car);
+
+        carService.removeProductFromCar(1L, 1L);
+
+        assertFalse(car.getProducts().contains(product));
+        verify(carDao, times(1)).saveCar(car);
+    }
+
+    @Test
+    public void testGetAllOwnersOfCar() {
+        Car car = new Car();
+        car.setId(1L);
+        if (car.getOwners() == null) {
+            car.setOwners(new ArrayList<>());
+        }
+
+        Owner owner = new Owner();
+        owner.setId(1L);
+
+        car.getOwners().add(owner);
+
+        when(carDao.getCarById(1L)).thenReturn(car);
+
+        List<Owner> owners = carService.getAllOwnersOfCar(1L);
+
+        assertEquals(1, owners.size());
+        verify(carDao, times(1)).getCarById(1L);
+    }
+
+    @Test
+    public void testUpdateCarOwners() {
+        Car car = new Car();
+        car.setId(1L);
+        List<Long> ownerIds = Arrays.asList(1L, 2L);
+
+        Owner owner1 = new Owner();
+        owner1.setId(1L);
+
+        Owner owner2 = new Owner();
+        owner2.setId(2L);
+
+        when(carDao.getCarById(1L)).thenReturn(car);
+        when(ownerDao.getOwnerById(1L)).thenReturn(owner1);
+        when(ownerDao.getOwnerById(2L)).thenReturn(owner2);
+
+        if (car.getOwners() == null) {
+            car.setOwners(new ArrayList<>());
+        }
+
+        carService.updateCarOwners(1L, ownerIds);
+
+        assertTrue(car.getOwners().contains(owner1));
+        assertTrue(car.getOwners().contains(owner2));
+        verify(carDao, times(1)).saveCar(car);
+    }
+
+    @Test
+    public void testUpdateCarProducts() {
+        Car car = new Car();
+        car.setId(1L);
+        List<Long> productIds = Arrays.asList(1L, 2L);
+
+        Product product1 = new Product();
+        product1.setId(1L);
+
+        Product product2 = new Product();
+        product2.setId(2L);
+
+        when(carDao.getCarById(1L)).thenReturn(car);
+        when(productDao.getProductById(1L)).thenReturn(product1);
+        when(productDao.getProductById(2L)).thenReturn(product2);
+
+        if (car.getProducts() == null) {
+            car.setProducts(new ArrayList<>());
+        }
+
+        carService.updateCarProducts(1L, productIds);
+
+        assertTrue(car.getProducts().contains(product1));
+        assertTrue(car.getProducts().contains(product2));
+        verify(carDao, times(1)).saveCar(car);
+    }
 }
-

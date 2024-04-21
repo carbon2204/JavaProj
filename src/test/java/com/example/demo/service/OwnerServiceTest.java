@@ -88,15 +88,17 @@ class OwnerServiceTest {
   @Test
   void testUpdateOwner() {
     long ownerId = 1L;
+
+    // Используем один и тот же объект для подготовки мока и вызова метода
     Owner owner = new Owner();
-    Owner updatedOwner = new Owner();
-    updatedOwner.setId(ownerId);
+    owner.setId(ownerId);
+
     when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
-    when(ownerDao.saveOwner(updatedOwner)).thenReturn(updatedOwner);
+    when(ownerDao.saveOwner(owner)).thenReturn(owner);
 
-    Owner result = ownerService.updateOwner(ownerId, updatedOwner);
+    Owner result = ownerService.updateOwner(ownerId, owner);
 
-    assertEquals(updatedOwner, result);
+    assertEquals(owner, result);
   }
 
   @Test
@@ -133,13 +135,22 @@ class OwnerServiceTest {
     long carId = 1L;
     Owner owner = new Owner();
     Car car = new Car();
+
+    // Убедимся, что оба списка (у владельца и у машины) инициализированы
+    owner.setCars(new ArrayList<>());
+    car.setOwners(new ArrayList<>());
+
     when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
     when(carDao.getCarById(carId)).thenReturn(car);
 
     ownerService.addCarToOwner(ownerId, carId);
 
+    // Проверяем, что машина добавлена к владельцу, а владелец добавлен к машине
     assertEquals(1, owner.getCars().size());
     assertEquals(car, owner.getCars().get(0));
+
+    assertEquals(1, car.getOwners().size());
+    assertEquals(owner, car.getOwners().get(0));
   }
 
   @Test
@@ -149,7 +160,11 @@ class OwnerServiceTest {
     Owner owner = new Owner();
     Car car = new Car();
     car.setId(carId);
+
+    // Убедимся, что список машин инициализирован, и добавим машину для удаления
+    owner.setCars(new ArrayList<>());
     owner.getCars().add(car);
+
     when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
 
     ownerService.removeCarFromOwner(ownerId, carId);

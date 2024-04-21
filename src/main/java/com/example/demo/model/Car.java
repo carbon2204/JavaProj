@@ -9,12 +9,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The type Car.
  */
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "cars")
 public class Car {
   @Id
