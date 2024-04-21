@@ -132,7 +132,7 @@ class OwnerServiceTest {
   @Test
   void testAddCarToOwner() {
     long ownerId = 1L;
-    long carId = 1L;
+    final long carId = 1L;
     Owner owner = new Owner();
     Car car = new Car();
 
@@ -155,7 +155,7 @@ class OwnerServiceTest {
 
   @Test
   void testRemoveCarFromOwner() {
-    long ownerId = 1L;
+    final long ownerId = 1L;
     long carId = 1L;
     Owner owner = new Owner();
     Car car = new Car();

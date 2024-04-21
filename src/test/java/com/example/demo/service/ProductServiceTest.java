@@ -5,7 +5,6 @@ import com.example.demo.dao.ProductDao;
 import com.example.demo.model.Owner;
 import com.example.demo.model.Product;
 import com.example.demo.repository.ProductRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -103,18 +102,19 @@ import static org.mockito.Mockito.when;
     verify(productDao, times(1)).deleteProduct(productId);
   }
 
-    @Test
-    void testFindAllProductsByOwnerId() {
-        long ownerId = 1L;
-        List<Product> products = List.of(new Product(), new Product());
-        when(cacheService.containsKey("productsByOwner:" + ownerId)).thenReturn(false); // Исправленные аргументы
+  @Test
+  void testFindAllProductsByOwnerId() {
+    long ownerId = 1L;
+    List<Product> products = List.of(new Product(), new Product());
+    when(cacheService.containsKey("productsByOwner:"
+            + ownerId)).thenReturn(false); // Исправленные аргументы
 
-        when(productRepository.findAllProductsByOwnerId(ownerId)).thenReturn(products);
+    when(productRepository.findAllProductsByOwnerId(ownerId)).thenReturn(products);
 
-        List<Product> result = productService.findAllProductsByOwnerId(ownerId);
+    List<Product> result = productService.findAllProductsByOwnerId(ownerId);
 
-        assertEquals(products, result);
-    }
+    assertEquals(products, result);
+  }
 
   @Test
   void testAddProductToOwner() {
@@ -134,21 +134,21 @@ import static org.mockito.Mockito.when;
     assertEquals(owner, product.getOwner());
   }
 
-    @Test
-    void testRemoveProductFromOwner() {
-        long ownerId = 1L;
-        long productId = 1L;
-        Owner owner = new Owner();
-        owner.setProducts(new ArrayList<>()); // Инициализируем поле products
-        Product product = new Product();
-        product.setId(productId);
-        owner.getProducts().add(product);
-        when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
+  @Test
+  void testRemoveProductFromOwner() {
+    final long ownerId = 1L;
+    long productId = 1L;
+    Owner owner = new Owner();
+    owner.setProducts(new ArrayList<>()); // Инициализируем поле products
+    Product product = new Product();
+    product.setId(productId);
+    owner.getProducts().add(product);
+    when(ownerDao.getOwnerById(ownerId)).thenReturn(owner);
 
-        productService.removeProductFromOwner(ownerId, productId);
+    productService.removeProductFromOwner(ownerId, productId);
 
-        assertFalse(owner.getProducts().contains(product));
-        verify(ownerDao, times(1)).saveOwner(owner);
-    }
+    assertFalse(owner.getProducts().contains(product));
+    verify(ownerDao, times(1)).saveOwner(owner);
+  }
 }
 
