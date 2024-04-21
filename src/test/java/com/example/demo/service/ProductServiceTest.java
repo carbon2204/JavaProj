@@ -107,7 +107,7 @@ import static org.mockito.Mockito.when;
     long ownerId = 1L;
     List<Product> products = List.of(new Product(), new Product());
     when(cacheService.containsKey("productsByOwner:"
-            + ownerId)).thenReturn(false); // Исправленные аргументы
+            + ownerId)).thenReturn(false);
 
     when(productRepository.findAllProductsByOwnerId(ownerId)).thenReturn(products);
 
@@ -139,7 +139,7 @@ import static org.mockito.Mockito.when;
     final long ownerId = 1L;
     long productId = 1L;
     Owner owner = new Owner();
-    owner.setProducts(new ArrayList<>()); // Инициализируем поле products
+    owner.setProducts(new ArrayList<>());
     Product product = new Product();
     product.setId(productId);
     owner.getProducts().add(product);

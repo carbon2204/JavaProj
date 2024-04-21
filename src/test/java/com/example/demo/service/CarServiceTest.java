@@ -83,8 +83,8 @@ public class CarServiceTest {
   public void testUpdateCar_Found() {
     Car existingCar = new Car();
     existingCar.setId(1L);
-    existingCar.setOwners(new ArrayList<>()); // Убедимся, что список не null
-    existingCar.setProducts(new ArrayList<>()); // Убедимся, что список не null
+    existingCar.setOwners(new ArrayList<>());
+    existingCar.setProducts(new ArrayList<>());
 
     Car updateCar = new Car();
     updateCar.setVin("NEWVIN");
@@ -143,20 +143,20 @@ public class CarServiceTest {
   public void testAddOwnerToCar() {
     Car car = new Car();
     car.setId(1L);
-    car.setOwners(new ArrayList<>());  // Убедитесь, что список не null
+    car.setOwners(new ArrayList<>());
 
     Owner owner = new Owner();
     owner.setId(1L);
-    owner.setCars(new ArrayList<>());  // Убедитесь, что список не null
+    owner.setCars(new ArrayList<>());
 
     when(carDao.getCarById(1L)).thenReturn(car);
     when(ownerDao.getOwnerById(1L)).thenReturn(owner);
 
     carService.addOwnerToCar(1L, 1L);
 
-    assertTrue(car.getOwners().contains(owner));  // Проверяем добавление
-    assertTrue(owner.getCars().contains(car));  // Проверяем добавление в Owner
-    verify(carDao, times(1)).saveCar(car);  // Убедитесь, что метод сохранения вызван
+    assertTrue(car.getOwners().contains(owner));
+    assertTrue(owner.getCars().contains(car));
+    verify(carDao, times(1)).saveCar(car);
   }
 
   @Test

@@ -161,7 +161,6 @@ class OwnerServiceTest {
     Car car = new Car();
     car.setId(carId);
 
-    // Убедимся, что список машин инициализирован, и добавим машину для удаления
     owner.setCars(new ArrayList<>());
     owner.getCars().add(car);
 
