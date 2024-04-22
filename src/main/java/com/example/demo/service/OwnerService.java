@@ -67,7 +67,7 @@ public class OwnerService {
     if (owner != null) {
       return owner.getProducts();
     }
-    return new LinkedList<Product>();
+    return new LinkedList<>();
   }
 
   /**
@@ -127,7 +127,7 @@ public class OwnerService {
     Owner owner = ownerDao.getOwnerById(ownerId);
     if (owner != null) {
       List<Car> cars = carIds.stream()
-              .map(carId -> carDao.getCarById(carId)).toList();
+              .map(carDao::getCarById).toList();
       owner.setCars(cars);
       ownerDao.saveOwner(owner);
     }
@@ -144,6 +144,6 @@ public class OwnerService {
     if (owner != null) {
       return owner.getCars();
     }
-    return new LinkedList<Car>();
+    return new LinkedList<>();
   }
 }
