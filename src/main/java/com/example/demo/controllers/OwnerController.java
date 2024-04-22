@@ -107,9 +107,7 @@ public class OwnerController {
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping("/addSeveralOwners")
   public List<Owner> addSeveralOwners(@RequestBody List<Owner> owners) {
-    return owners.stream()
-            .map(ownerService::saveOwner)
-            .toList();
+    return ownerService.addSeveralOwners(owners);
   }
 }
 
