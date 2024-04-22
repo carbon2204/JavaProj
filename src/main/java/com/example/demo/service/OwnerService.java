@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * The type Owner service.
@@ -150,7 +149,6 @@ public class OwnerService {
 
   public List<Owner> addSeveralOwners(List<Owner> owners){
     return owners.stream()
-            .peek(ownerDao::saveOwner)
-            .toList();
+            .map(ownerDao::saveOwner).toList();
   }
 }
