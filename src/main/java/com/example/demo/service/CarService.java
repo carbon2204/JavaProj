@@ -14,34 +14,28 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-/**
- * The type Car service.
- */
+/** The type Car service. */
 @Service
 public class CarService {
 
   private final CarDao carDao;
   private final ProductDao productDao;
   private final OwnerDao ownerDao;
-  private final CacheService cacheService;
   private CarRepository carRepository;
 
   /**
-     * Instantiates a new Car service.
-     *
-     * @param carDao        the car dao
-     * @param carRepository the car repository
-     * @param cacheService  the cache service
-     * @param productDao    the product dao
-     * @param ownerDao      the owner dao
-     */
+   * Instantiates a new Car service.
+   *
+   * @param carDao the car dao
+   * @param carRepository the car repository
+   * @param productDao the product dao
+   * @param ownerDao the owner dao
+   */
   @Autowired
-  public CarService(CarDao carDao, CarRepository carRepository, CacheService cacheService,
-                    ProductDao productDao, OwnerDao ownerDao) {
+  public CarService(
+      CarDao carDao, CarRepository carRepository, ProductDao productDao, OwnerDao ownerDao) {
     this.carDao = carDao;
     this.carRepository = carRepository;
-    this.cacheService = cacheService;
     this.productDao = productDao;
     this.ownerDao = ownerDao;
   }
@@ -59,12 +53,12 @@ public class CarService {
   }
 
   /**
-     * Update car car.
-     *
-     * @param id  the id
-     * @param car the car
-     * @return the car
-     */
+   * Update car car.
+   *
+   * @param id the id
+   * @param car the car
+   * @return the car
+   */
   public Car updateCar(Long id, Car car) {
     Car existingCar = carDao.getCarById(id);
     if (existingCar != null) {
@@ -81,13 +75,12 @@ public class CarService {
     carDao.deleteCar(id);
   }
 
-
   /**
-     * Analyze text car.
-     *
-     * @param text the text
-     * @return the car
-     */
+   * Analyze text car.
+   *
+   * @param text the text
+   * @return the car
+   */
   public Car analyzeText(String text) {
     Car car = new Car();
 
@@ -129,28 +122,28 @@ public class CarService {
   }
 
   /**
-     * Add owner to car.
-     *
-     * @param carId   the car id
-     * @param ownerId the owner id
-     */
+   * Add owner to car.
+   *
+   * @param carId the car id
+   * @param ownerId the owner id
+   */
   public void addOwnerToCar(Long carId, Long ownerId) {
     Car car = carDao.getCarById(carId);
     Owner owner = ownerDao.getOwnerById(ownerId);
     if (car != null && owner != null) {
-      car.getOwners().add(owner);  // Добавление владельца к машине
-      owner.getCars().add(car);  // Добавление машины к владельцу
+      car.getOwners().add(owner); // Добавление владельца к машине
+      owner.getCars().add(car); // Добавление машины к владельцу
       carDao.saveCar(car);
       ownerDao.saveOwner(owner);
     }
   }
 
   /**
-     * Remove owner from car.
-     *
-     * @param carId   the car id
-     * @param ownerId the owner id
-     */
+   * Remove owner from car.
+   *
+   * @param carId the car id
+   * @param ownerId the owner id
+   */
   public void removeOwnerFromCar(Long carId, Long ownerId) {
     Car car = carDao.getCarById(carId);
     if (car != null) {
@@ -160,41 +153,40 @@ public class CarService {
   }
 
   /**
-     * Update car owners.
-     *
-     * @param carId    the car id
-     * @param ownerIds the owner ids
-     */
+   * Update car owners.
+   *
+   * @param carId the car id
+   * @param ownerIds the owner ids
+   */
   public void updateCarOwners(Long carId, List<Long> ownerIds) {
     Car car = carDao.getCarById(carId);
     if (car != null) {
-      List<Owner> owners = ownerIds.stream()
-          .map(ownerId -> ownerDao.getOwnerById(ownerId)).toList();
+      List<Owner> owners = ownerIds.stream().map(ownerDao::getOwnerById).toList();
       car.setOwners(owners);
       carDao.saveCar(car);
     }
   }
 
   /**
-     * Gets all owners of car.
-     *
-     * @param carId the car id
-     * @return the all owners of car
-     */
+   * Gets all owners of car.
+   *
+   * @param carId the car id
+   * @return the all owners of car
+   */
   public List<Owner> getAllOwnersOfCar(Long carId) {
     Car car = carDao.getCarById(carId);
     if (car != null) {
       return car.getOwners();
     }
-    return new LinkedList<Owner>();
+    return new LinkedList<>();
   }
 
   /**
-     * Add product to car.
-     *
-     * @param carId     the car id
-     * @param productId the product id
-     */
+   * Add product to car.
+   *
+   * @param carId the car id
+   * @param productId the product id
+   */
   public void addProductToCar(Long carId, Long productId) {
     Car car = carDao.getCarById(carId);
     Product product = productDao.getProductById(productId);
@@ -206,11 +198,11 @@ public class CarService {
   }
 
   /**
-     * Remove product from car.
-     *
-     * @param carId     the car id
-     * @param productId the product id
-     */
+   * Remove product from car.
+   *
+   * @param carId the car id
+   * @param productId the product id
+   */
   public void removeProductFromCar(Long carId, Long productId) {
     Car car = carDao.getCarById(carId);
     if (car != null) {
@@ -220,34 +212,31 @@ public class CarService {
   }
 
   /**
-     * Update car products.
-     *
-     * @param carId      the car id
-     * @param productIds the product ids
-     */
+   * Update car products.
+   *
+   * @param carId the car id
+   * @param productIds the product ids
+   */
   public void updateCarProducts(Long carId, List<Long> productIds) {
     Car car = carDao.getCarById(carId);
     if (car != null) {
-      List<Product> products = productIds.stream()
-          .map(productId -> productDao.getProductById(productId)).toList();
+      List<Product> products = productIds.stream().map(productDao::getProductById).toList();
       car.setProducts(products);
       carDao.saveCar(car);
     }
   }
 
   /**
-     * Gets all products of car.
-     *
-     * @param carId the car id
-     * @return the all products of car
-     */
+   * Gets all products of car.
+   *
+   * @param carId the car id
+   * @return the all products of car
+   */
   public List<Product> getAllProductsOfCar(Long carId) {
     Car car = carDao.getCarById(carId);
     if (car != null) {
       return car.getProducts();
     }
-    return new LinkedList<Product>();
+    return new LinkedList<>();
   }
 }
-
-

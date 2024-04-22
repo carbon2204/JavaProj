@@ -10,7 +10,6 @@ import com.example.demo.repository.CarRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,33 +19,26 @@ import org.mockito.MockitoAnnotations;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-/**
- * The type Car service test.
- */
-public class CarServiceTest {
+/** The type Car service test. */
+class CarServiceTest {
 
-  @Mock
-  private CarDao carDao;
+  @Mock private CarDao carDao;
 
-  @Mock
-  private ProductDao productDao;
+  @Mock private ProductDao productDao;
 
-  @Mock
-  private OwnerDao ownerDao;
+  @Mock private OwnerDao ownerDao;
 
-  @Mock
-  private CarRepository carRepository;
+  @Mock private CarRepository carRepository;
 
-  @InjectMocks
-  private CarService carService;
+  @InjectMocks private CarService carService;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     MockitoAnnotations.openMocks(this);
   }
 
   @Test
-  public void testGetAllCars() {
+  void testGetAllCars() {
     List<Car> cars = Arrays.asList(new Car(), new Car());
     when(carDao.getAllCars()).thenReturn(cars);
 
@@ -57,7 +49,7 @@ public class CarServiceTest {
   }
 
   @Test
-  public void testGetCarById() {
+  void testGetCarById() {
     Car car = new Car();
     car.setId(1L);
     when(carDao.getCarById(1L)).thenReturn(car);
@@ -69,7 +61,7 @@ public class CarServiceTest {
   }
 
   @Test
-  public void testSaveCar() {
+  void testSaveCar() {
     Car car = new Car();
     when(carDao.saveCar(car)).thenReturn(car);
 
@@ -80,7 +72,7 @@ public class CarServiceTest {
   }
 
   @Test
-  public void testUpdateCar_Found() {
+  void testUpdateCar_Found() {
     Car existingCar = new Car();
     existingCar.setId(1L);
     existingCar.setOwners(new ArrayList<>());
@@ -99,7 +91,7 @@ public class CarServiceTest {
   }
 
   @Test
-  public void testUpdateCar_NotFound() {
+  void testUpdateCar_NotFound() {
     Car updateCar = new Car();
     when(carDao.getCarById(1L)).thenReturn(null);
 
@@ -110,7 +102,7 @@ public class CarServiceTest {
   }
 
   @Test
-  public void testDeleteCar() {
+  void testDeleteCar() {
     doNothing().when(carDao).deleteCar(1L);
 
     carService.deleteCar(1L);
@@ -119,7 +111,7 @@ public class CarServiceTest {
   }
 
   @Test
-  public void testAnalyzeText() {
+  void testAnalyzeText() {
     final String text = "VIN: ABC123 Brand: Toyota Model: Camry Year: 2021";
 
     Car expectedCar = new Car();
@@ -140,7 +132,7 @@ public class CarServiceTest {
   }
 
   @Test
-  public void testAddOwnerToCar() {
+  void testAddOwnerToCar() {
     Car car = new Car();
     car.setId(1L);
     car.setOwners(new ArrayList<>());
@@ -160,7 +152,7 @@ public class CarServiceTest {
   }
 
   @Test
-  public void testRemoveOwnerFromCar() {
+  void testRemoveOwnerFromCar() {
     Car car = new Car();
     car.setId(1L);
     if (car.getOwners() == null) {
@@ -180,7 +172,7 @@ public class CarServiceTest {
   }
 
   @Test
-  public void testAddProductToCar() {
+  void testAddProductToCar() {
     Car car = new Car();
     car.setId(1L);
     if (car.getProducts() == null) {
@@ -199,7 +191,7 @@ public class CarServiceTest {
   }
 
   @Test
-  public void testRemoveProductFromCar() {
+  void testRemoveProductFromCar() {
     Car car = new Car();
     car.setId(1L);
     if (car.getProducts() == null) {
@@ -219,7 +211,7 @@ public class CarServiceTest {
   }
 
   @Test
-  public void testGetAllOwnersOfCar() {
+  void testGetAllOwnersOfCar() {
     Car car = new Car();
     car.setId(1L);
     if (car.getOwners() == null) {
@@ -240,7 +232,7 @@ public class CarServiceTest {
   }
 
   @Test
-  public void testUpdateCarOwners() {
+  void testUpdateCarOwners() {
     Car car = new Car();
     car.setId(1L);
     final List<Long> ownerIds = Arrays.asList(1L, 2L);
@@ -267,7 +259,7 @@ public class CarServiceTest {
   }
 
   @Test
-  public void testUpdateCarProducts() {
+  void testUpdateCarProducts() {
     Car car = new Car();
     car.setId(1L);
     final List<Long> productIds = Arrays.asList(1L, 2L);
