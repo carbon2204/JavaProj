@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoggingAspect {
   private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
-
+  private final Counter counter = new Counter();
   @Pointcut("execution(* com.example.demo.controllers.*.create*(..))")
     public void create() {
 
@@ -28,6 +28,11 @@ public class LoggingAspect {
 
   @Pointcut("execution(* com.example.demo.controllers.*.delete*(..))")
     public void delete() {
+
+  }
+
+  @Pointcut("execution(* com.example.demo.controllers.CarController.*(..))")
+  public void countLocation() {
 
   }
 
@@ -44,5 +49,10 @@ public class LoggingAspect {
   @AfterReturning(pointcut = "delete()", returning = "result")
     public void logDelete(Object result) {
     logger.info("Deleted: {}", result);
+  }
+
+  @AfterReturning(pointcut = "countLocation()")
+  public void logCountCar() {
+    logger.info("Car service count: {}", counter.incrementCounter());
   }
 }
