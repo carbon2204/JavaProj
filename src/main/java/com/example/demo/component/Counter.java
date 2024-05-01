@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 /** The type Request counter. */
 @Service
 public class Counter {
-  private final AtomicInteger counter = new AtomicInteger(0);
+  private final AtomicInteger count = new AtomicInteger(0);
 
   public synchronized int incrementCounter() {
-    return counter.incrementAndGet();
+    return count.incrementAndGet();
   }
 }

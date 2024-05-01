@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class LoggingAspect {
   private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
   private final Counter counter = new Counter();
+
   @Pointcut("execution(* com.example.demo.controllers.*.create*(..))")
     public void create() {
 
