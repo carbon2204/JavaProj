@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Car List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Стили для боковой панели */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            /*overflow: hidden; /* Отключаем прокрутку, чтобы фон был на весь экран */
+            background: linear-gradient(to bottom, #000033, #4343dc); /* Градиент с начальным и конечным цветом */
+            background-size: 100% auto; /* Растягиваем фон по горизонтали и вертикали */
+            background-attachment: fixed; /* Фиксируем фон, чтобы он не скроллился */
+            animation: wave 0.1s infinite linear; /* Анимация волны */
+        }
+        /*.container {
+            position: relative;
+            height: 100%;
+            overflow: hidden;
+        }*/
+
+        /*.background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #000033, #2929ff);
+            z-index: -1;
+            animation: wave 1s infinite linear;
+        }*/
+
+
+        .main-content {
+            background-color: rgba(255, 255, 255, 1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 50px auto;
+            max-width: 900px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Анимация волны */
+        @keyframes wave {
+            0% {
+                background-position: 0% 0%; /* Начальная позиция градиента */
+            }
+            100% {
+                background-position: 0% 100%; /* Конечная позиция градиента */
+            }
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        /* Стили для кнопки открытия боковой панели */
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+        }
+
+        .openbtn:hover {
+            background-color: #444;
+        }
+
+        .table-container {
+            position: relative;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a th:href="@{/cars}">Database of cars</a>
+    <a th:href="@{/owners}">Database of owners</a>
+</div>
+
+<button class="openbtn" onclick="openNav()">&#62;</button>
+<div id="main">
+
+
+<div class="container table-container">
+        <div class="main-content">
+    <h1 class="mt-5">Database of cars</h1>
+    <table class="table table-striped mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>VIN</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="car : ${cars}">
+            <td th:text="${car.id}">1</td>
+            <td th:text="${car.vin}">VIN</td>
+            <td th:text="${car.make}">Make</td>
+            <td th:text="${car.model}">Model</td>
+            <td th:text="${car.year}">Year</td>
+
+            <td>
+                <a th:href="@{/cars/{id}(id=${car.id})}" class="btn btn-info">View</a>
+                <a th:href="@{/cars/edit/{id}(id=${car.id})}" class="btn btn-warning">Edit</a>
+                <form th:action="@{/cars/delete/{id}(id=${car.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <button class="btn btn-primary" onclick="showCreateForm()">Create new car</button>
+    <br><br>
+    <div id="createCarForm" style="display:none;">
+        <form th:action="@{/cars/create}" method="post">
+            <input type="text" name="text" placeholder="Enter car details">
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    </div>
+</div>
+    </div>
+    <script>
+        function showCreateForm() {
+            document.getElementById('createCarForm').style.display = 'block';
+        }
+        function openNav() {
+            document.getElementById("mySidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+            document.getElementById("openSidebarBtn").style.display = "none";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+            document.getElementById("openSidebarBtn").style.display = "block";
+        }
+    </script>
+</div>
+</body>
+</html>

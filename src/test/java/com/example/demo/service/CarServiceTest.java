@@ -118,7 +118,7 @@ class CarServiceTest {
     expectedCar.setVin("ABC123");
     expectedCar.setMake("Toyota");
     expectedCar.setModel("Camry");
-    expectedCar.setYear(2021);
+    expectedCar.setYear("2021");
 
     when(carRepository.save(any(Car.class))).thenReturn(expectedCar);
 

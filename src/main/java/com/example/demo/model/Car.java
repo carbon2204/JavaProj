@@ -28,7 +28,7 @@ public class Car {
   private String vin;
   private String make;
   private String model;
-  private int year;
+  private String year;
   @JsonIgnoreProperties({"car"})
   @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private List<Product> products;
@@ -69,11 +69,11 @@ public class Car {
     this.model = model;
   }
 
-  public int getYear() {
+  public String getYear() {
     return year;
   }
 
-  public void setYear(int year) {
+  public void setYear(String year) {
     this.year = year;
   }
 

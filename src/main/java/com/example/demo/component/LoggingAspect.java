@@ -33,7 +33,7 @@ public class LoggingAspect {
   }
 
   @Pointcut("execution(* com.example.demo.controllers.CarController.*(..))")
-  public void countLocation() {
+  public void countCar() {
 
   }
 
@@ -52,7 +52,7 @@ public class LoggingAspect {
     logger.info("Deleted: {}", result);
   }
 
-  @AfterReturning(pointcut = "countLocation()")
+  @AfterReturning(pointcut = "countCar()")
   public void logCountCar() {
     logger.info("Car service count: {}", counter.incrementCounter());
   }

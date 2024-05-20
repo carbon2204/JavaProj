@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Owners</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            /*overflow: hidden; /* Отключаем прокрутку, чтобы фон был на весь экран */
+            background: linear-gradient(to bottom, #000033, #4343dc); /* Градиент с начальным и конечным цветом */
+            background-size: 100% auto; /* Растягиваем фон по горизонтали и вертикали */
+            background-attachment: fixed; /* Фиксируем фон, чтобы он не скроллился */
+            animation: wave 0.1s infinite linear; /* Анимация волны */
+        }
+
+        .main-content {
+            background-color: rgba(255, 255, 255, 1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 50px auto;
+            max-width: 900px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Анимация волны */
+        @keyframes wave {
+            0% {
+                background-position: 0% 0%; /* Начальная позиция градиента */
+            }
+            100% {
+                background-position: 0% 100%; /* Конечная позиция градиента */
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="main-content">
+    <h1 class="mt-5">Add Owners to Car</h1>
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="owner : ${owners}">
+            <td th:text="${owner.id}"></td>
+            <td th:text="${owner.name}"></td>
+            <td>
+                <form th:action="@{/cars/{carId}/add/owners/{ownerId}(carId=${car.id}, ownerId=${owner.id})}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-success btn-sm">+</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/cars/{carId}(carId=${car.id})}" class="btn btn-secondary">Back to Car Details</a>
+</div>
+</div>
+</body>
+</html>

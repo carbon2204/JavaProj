@@ -11,6 +11,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.example.demo.repository.OwnerRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +24,11 @@ public class CarService {
   private final CarDao carDao;
   private final ProductDao productDao;
   private final OwnerDao ownerDao;
+  @Autowired
   private CarRepository carRepository;
+
+  @Autowired
+  private OwnerRepository ownerRepository;
 
   /**
    * Instantiates a new Car service.
@@ -115,7 +122,7 @@ public class CarService {
     Pattern yearPattern = Pattern.compile(yearRegex);
     Matcher yearMatcher = yearPattern.matcher(text);
     if (yearMatcher.find()) {
-      car.setYear(Integer.parseInt(yearMatcher.group(1)));
+      car.setYear(yearMatcher.group(1));
     }
 
     return carRepository.save(car);
@@ -127,7 +134,7 @@ public class CarService {
    * @param carId the car id
    * @param ownerId the owner id
    */
-  public void addOwnerToCar(Long carId, Long ownerId) {
+  /*public void addOwnerToCar(Long carId, Long ownerId) {
     Car car = carDao.getCarById(carId);
     Owner owner = ownerDao.getOwnerById(ownerId);
     if (car != null && owner != null) {
@@ -136,6 +143,18 @@ public class CarService {
       carDao.saveCar(car);
       ownerDao.saveOwner(owner);
     }
+  }*/
+
+  @Transactional
+  public void addOwnerToCar(Long carId, Long ownerId) {
+    Car car = carRepository.findById(carId).orElseThrow(() -> new IllegalArgumentException("Invalid car Id:" + carId));
+    Owner owner = ownerRepository.findById(ownerId).orElseThrow(() -> new IllegalArgumentException("Invalid owner Id:" + ownerId));
+
+    car.getOwners().add(owner);
+    owner.getCars().add(car);
+
+    carRepository.save(car);
+    ownerRepository.save(owner);
   }
 
   /**
@@ -144,12 +163,16 @@ public class CarService {
    * @param carId the car id
    * @param ownerId the owner id
    */
+  @Transactional
   public void removeOwnerFromCar(Long carId, Long ownerId) {
-    Car car = carDao.getCarById(carId);
-    if (car != null) {
-      car.getOwners().removeIf(owner -> owner.getId().equals(ownerId));
-      carDao.saveCar(car);
-    }
+    Car car = carRepository.findById(carId).orElseThrow(() -> new IllegalArgumentException("Invalid car Id:" + carId));
+    Owner owner = ownerRepository.findById(ownerId).orElseThrow(() -> new IllegalArgumentException("Invalid owner Id:" + ownerId));
+
+    car.getOwners().remove(owner);
+    owner.getCars().remove(car);
+
+    carRepository.save(car);
+    ownerRepository.save(owner);
   }
 
   /**

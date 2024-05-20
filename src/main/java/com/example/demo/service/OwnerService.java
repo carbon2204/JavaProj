@@ -7,6 +7,10 @@ import com.example.demo.model.Owner;
 import com.example.demo.model.Product;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.example.demo.repository.CarRepository;
+import com.example.demo.repository.OwnerRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +23,17 @@ public class OwnerService {
   private final CarDao carDao;
 
   @Autowired
-    public OwnerService(OwnerDao ownerDao, CarDao carDao) {
+  private OwnerRepository ownerRepository;
+
+  @Autowired
+  private CarRepository carRepository;
+
+  @Autowired
+    public OwnerService(OwnerDao ownerDao, CarDao carDao, OwnerRepository ownerRepository, CarRepository carRepository) {
     this.carDao = carDao;
     this.ownerDao = ownerDao;
+    this.ownerRepository = ownerRepository;
+    this.carRepository = carRepository;
   }
 
   public List<Owner> getAllOwners() {
@@ -92,15 +104,16 @@ public class OwnerService {
      * @param ownerId the owner id
      * @param carId   the car id
      */
+  @Transactional
   public void addCarToOwner(Long ownerId, Long carId) {
-    Owner owner = ownerDao.getOwnerById(ownerId);
-    Car car = carDao.getCarById(carId);
-    if (owner != null && car != null) {
-      owner.getCars().add(car);  // Добавление машины к владельцу
-      car.getOwners().add(owner);  // Добавление владельца к машине
-      ownerDao.saveOwner(owner);
-      carDao.saveCar(car);
-    }
+    Owner owner = ownerRepository.findById(ownerId).orElseThrow(() -> new IllegalArgumentException("Invalid owner Id:" + ownerId));
+    Car car = carRepository.findById(carId).orElseThrow(() -> new IllegalArgumentException("Invalid car Id:" + carId));
+
+    owner.getCars().add(car);
+    car.getOwners().add(owner);
+
+    ownerRepository.save(owner);
+    carRepository.save(car);
   }
 
   /**
@@ -109,12 +122,16 @@ public class OwnerService {
      * @param ownerId the owner id
      * @param carId   the car id
      */
+  @Transactional
   public void removeCarFromOwner(Long ownerId, Long carId) {
-    Owner owner = ownerDao.getOwnerById(ownerId);
-    if (owner != null) {
-      owner.getCars().removeIf(car -> car.getId().equals(carId));
-      ownerDao.saveOwner(owner);
-    }
+    Owner owner = ownerRepository.findById(ownerId).orElseThrow(() -> new IllegalArgumentException("Invalid owner Id:" + ownerId));
+    Car car = carRepository.findById(carId).orElseThrow(() -> new IllegalArgumentException("Invalid car Id:" + carId));
+
+    owner.getCars().remove(car);
+    car.getOwners().remove(owner);
+
+    ownerRepository.save(owner);
+    carRepository.save(car);
   }
 
   /**

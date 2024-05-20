@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Owner List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            /*overflow: hidden; /* Отключаем прокрутку, чтобы фон был на весь экран */
+            background: linear-gradient(to bottom, #000033, #4343dc); /* Градиент с начальным и конечным цветом */
+            background-size: 100% auto; /* Растягиваем фон по горизонтали и вертикали */
+            background-attachment: fixed; /* Фиксируем фон, чтобы он не скроллился */
+            animation: wave 0.1s infinite linear; /* Анимация волны */
+        }
+
+        .main-content {
+            background-color: rgba(255, 255, 255, 1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 50px auto;
+            max-width: 900px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes wave {
+            0% {
+                background-position: 0% 0%; /* Начальная позиция градиента */
+            }
+            100% {
+                background-position: 0% 100%; /* Конечная позиция градиента */
+            }
+        }
+        /* Стили для боковой панели */
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #111;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+        }
+
+        .openbtn:hover {
+            background-color: #444;
+        }
+    </style>
+</head>
+<body>
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a th:href="@{/cars}" class="btn btn-black">Database of Cars</a>
+    <a th:href="@{/owners}" class="btn btn-black">Database of Owners</a>
+</div>
+<button class="openbtn" onclick="openNav()">&#62;</button>
+<div id="main">
+
+<div class="container">
+    <div class="main-content">
+    <h1>Database of owners</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="owner : ${owners}">
+            <td th:text="${owner.id}">ID</td>
+            <td th:text="${owner.name}">Name</td>
+            <td>
+                <a th:href="@{/owners/view/{id}(id=${owner.id})}" class="btn btn-info">View</a>
+                <a th:href="@{/owners/edit/{id}(id=${owner.id})}" class="btn btn-warning">Edit</a>
+                <form th:action="@{/owners/delete/{id}(id=${owner.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/owners/createform}" class="btn btn-primary">Create new owner</a>
+</div>
+</div>
+<script>
+    function openNav() {
+        document.getElementById("mySidebar").style.width = "290px";
+        document.getElementById("main").style.marginLeft = "290px";
+        document.getElementById("openSidebarBtn").style.display = "none";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("main").style.marginLeft = "0";
+        document.getElementById("openSidebarBtn").style.display = "block";
+    }
+</script>
+</body>
+</html>
